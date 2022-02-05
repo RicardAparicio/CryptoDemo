@@ -1,7 +1,7 @@
 package com.ricardaparicio.cryptodemo.core.di
 
 import com.ricardaparicio.cryptodemo.core.networking.loggingInterceptor
-import com.ricardaparicio.cryptodemo.features.common.data.CoinApiService
+import com.ricardaparicio.cryptodemo.features.common.data.api.CoinApiService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

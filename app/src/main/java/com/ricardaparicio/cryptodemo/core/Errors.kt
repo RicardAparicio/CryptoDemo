@@ -1,7 +1,6 @@
 package com.ricardaparicio.cryptodemo.core
 
-sealed interface Error
-sealed interface FeatureError: Error
+sealed interface Failure
 
-object NetworkError : Error
-object ServerError : Error
+object NetworkingError : Failure
+object ServerError : Failure

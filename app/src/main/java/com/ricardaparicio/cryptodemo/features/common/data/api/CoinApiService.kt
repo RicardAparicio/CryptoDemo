@@ -1,4 +1,4 @@
-package com.ricardaparicio.cryptodemo.features.common.data
+package com.ricardaparicio.cryptodemo.features.common.data.api
 
 import com.ricardaparicio.cryptodemo.features.common.data.model.CoinApiModel
 import com.ricardaparicio.cryptodemo.features.common.data.model.CoinSummaryApiModel
@@ -10,11 +10,9 @@ import retrofit2.http.Query
 interface CoinApiService {
     @GET("coins/markets")
     suspend fun getCoins(
-        @Query("vs_currency") currency: String,
-        @Query("order") order: String,
-        @Query("per_page") itemsPerPage: Int,
-        @Query("page") page: Int,
-        @Query("sparkline") sparkLine: Boolean,
+        @Query("per_page") itemsPerPage: Int = 20,
+        @Query("vs_currency") currency: String = "eur",
+        @Query("sparkline") sparkLine: Boolean = false,
     ): Call<List<CoinSummaryApiModel>>
 
     @GET("coins/{id}")
