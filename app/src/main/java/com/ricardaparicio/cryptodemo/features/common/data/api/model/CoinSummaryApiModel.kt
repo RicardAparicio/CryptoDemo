@@ -1,4 +1,4 @@
-package com.ricardaparicio.cryptodemo.features.common.data.model
+package com.ricardaparicio.cryptodemo.features.common.data.api.model
 
 data class CoinSummaryApiModel(
     val id: String,

@@ -1,7 +1,7 @@
 package com.ricardaparicio.cryptodemo.features.common.data.api
 
-import com.ricardaparicio.cryptodemo.features.common.data.model.CoinApiModel
-import com.ricardaparicio.cryptodemo.features.common.data.model.CoinSummaryApiModel
+import com.ricardaparicio.cryptodemo.features.common.data.api.model.CoinApiModel
+import com.ricardaparicio.cryptodemo.features.common.data.api.model.CoinSummaryApiModel
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Path
