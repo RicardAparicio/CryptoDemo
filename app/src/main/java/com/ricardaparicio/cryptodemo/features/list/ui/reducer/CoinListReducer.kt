@@ -17,13 +17,14 @@ class CoinListReducer @Inject constructor() : Reducer<CoinListUiState, CoinListU
         when (action) {
             is CoinListUiAction.Coins -> {
                 state.copy(
-                    coins = action.coins.map { coinSummary ->
+                    coins = action.coins.mapIndexed { index, coinSummary ->
                         CoinSummaryUiModel(
                             id = coinSummary.id,
                             symbol = coinSummary.symbol,
                             name = coinSummary.name,
                             image = coinSummary.image,
-                            price = "${coinSummary.price}€"
+                            price = "${coinSummary.price}€",
+                            position = "${index + 1}"
                         )
                     }
                 )
