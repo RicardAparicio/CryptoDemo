@@ -38,7 +38,7 @@ class CoinListViewModel
                     },
                     { result ->
                         reduce(
-                            CoinListUiAction.Coins(result.coins)
+                            CoinListUiAction.NewCoins(result.coins)
                         )
                     }
                 )

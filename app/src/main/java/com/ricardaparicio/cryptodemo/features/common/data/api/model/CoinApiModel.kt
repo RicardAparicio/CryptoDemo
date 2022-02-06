@@ -8,6 +8,7 @@ data class CoinApiModel(
     val image: CoinImagesApiModel,
     val market_data: CoinMarketDataApiModel,
     val description: CoinDescriptionApiModel,
+    val market_cap_rank: Int,
 )
 
 data class CoinDescriptionApiModel(

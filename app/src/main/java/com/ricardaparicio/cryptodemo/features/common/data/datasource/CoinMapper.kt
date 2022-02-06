@@ -14,7 +14,8 @@ class CoinMapper @Inject constructor() {
             symbol = coinSummaryApiModel.symbol,
             name = coinSummaryApiModel.name,
             image = coinSummaryApiModel.image,
-            price = coinSummaryApiModel.current_price
+            price = coinSummaryApiModel.current_price,
+            marketCapRank = coinSummaryApiModel.market_cap_rank,
         )
 
     fun mapCoin(coinApiModel: CoinApiModel): Coin =
@@ -25,6 +26,7 @@ class CoinMapper @Inject constructor() {
                 name = coinApiModel.name,
                 image = coinApiModel.image.large,
                 price = coinApiModel.market_data.current_price.eur,
+                marketCapRank = coinApiModel.market_cap_rank,
             ),
             description = coinApiModel.description.es,
             ath = coinApiModel.market_data.ath.eur,
