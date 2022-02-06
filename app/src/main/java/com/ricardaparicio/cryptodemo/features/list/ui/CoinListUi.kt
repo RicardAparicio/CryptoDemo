@@ -17,7 +17,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberImagePainter
 import coil.transform.CircleCropTransformation
 import com.ricardaparicio.cryptodemo.core.util.TypedBlock
-import com.ricardaparicio.cryptodemo.features.list.ui.model.CoinSummaryUiModel
+import com.ricardaparicio.cryptodemo.features.common.ui.model.model.CoinSummaryUiModel
 import com.ricardaparicio.cryptodemo.features.list.ui.viewmodel.CoinListViewModel
 
 @Composable
@@ -55,7 +55,7 @@ private fun CoinItem(coinItem: CoinSummaryUiModel, onClickCoin: TypedBlock<CoinS
             Text(
                 modifier = Modifier,
                 textAlign = TextAlign.Center,
-                text = coinItem.position,
+                text = coinItem.marketCapPosition,
                 style = MaterialTheme.typography.caption,
             )
             Spacer(Modifier.width(20.dp))

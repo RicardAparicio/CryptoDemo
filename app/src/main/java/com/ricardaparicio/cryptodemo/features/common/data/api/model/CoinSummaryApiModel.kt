@@ -6,4 +6,5 @@ data class CoinSummaryApiModel(
     val name: String,
     val image: String,
     val current_price: Float,
+    val market_cap_rank: Int,
 )
