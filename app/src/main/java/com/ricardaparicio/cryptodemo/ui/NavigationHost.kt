@@ -19,7 +19,11 @@ fun NavigationHost(
         composable(
             route = NavRoute.CoinList.destination,
         ) {
-            CoinListScreen()
+            CoinListScreen { coinSummary ->
+                navController.navigate(
+                    NavRoute.CoinDetail.route(coinSummary.id)
+                )
+            }
         }
         composable(
             route = NavRoute.CoinDetail.destination,

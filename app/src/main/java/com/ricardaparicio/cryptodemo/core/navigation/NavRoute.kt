@@ -5,10 +5,9 @@ import androidx.navigation.NavType
 import androidx.navigation.navArgument
 
 sealed class NavRoute(
-    private val route: String,
+    private val baseRoute: String,
     private val navArgs: List<NavArg> = emptyList(),
 ) {
-
     object CoinList : NavRoute("coinList")
     object CoinDetail : NavRoute("coinDetail", listOf(NavArg.CoinId))
 
@@ -18,10 +17,16 @@ sealed class NavRoute(
         }
     }
 
+    fun route(vararg args: String = emptyArray()): String =
+        buildList {
+            add(baseRoute)
+            addAll(args)
+        }.joinToString("/")
+
     val destination: String = run {
         val argKeys = navArgs.map { navArg -> "{${navArg.key}}" }
         buildList {
-            add(route)
+            add(baseRoute)
             addAll(argKeys)
         }.joinToString("/")
     }
