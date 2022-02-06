@@ -1,7 +1,7 @@
-package com.ricardaparicio.cryptodemo.features.common.data.mapper
+package com.ricardaparicio.cryptodemo.features.common.data.datasource
 
-import com.ricardaparicio.cryptodemo.features.common.data.model.CoinApiModel
-import com.ricardaparicio.cryptodemo.features.common.data.model.CoinSummaryApiModel
+import com.ricardaparicio.cryptodemo.features.common.data.api.model.CoinApiModel
+import com.ricardaparicio.cryptodemo.features.common.data.api.model.CoinSummaryApiModel
 import com.ricardaparicio.cryptodemo.features.common.domain.model.Coin
 import com.ricardaparicio.cryptodemo.features.common.domain.model.CoinSummary
 import javax.inject.Inject

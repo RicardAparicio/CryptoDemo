@@ -5,7 +5,6 @@ import com.ricardaparicio.cryptodemo.core.Failure
 import com.ricardaparicio.cryptodemo.core.NetworkingError
 import com.ricardaparicio.cryptodemo.core.ServerError
 import com.ricardaparicio.cryptodemo.features.common.data.api.CoinApiService
-import com.ricardaparicio.cryptodemo.features.common.data.mapper.CoinMapper
 import com.ricardaparicio.cryptodemo.features.common.domain.model.Coin
 import com.ricardaparicio.cryptodemo.features.common.domain.model.CoinSummary
 import retrofit2.Call
