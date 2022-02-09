@@ -7,6 +7,7 @@ import com.ricardaparicio.cryptodemo.core.ServerError
 import com.ricardaparicio.cryptodemo.features.common.data.api.CoinApiService
 import com.ricardaparicio.cryptodemo.features.common.domain.model.Coin
 import com.ricardaparicio.cryptodemo.features.common.domain.model.CoinSummary
+import com.ricardaparicio.cryptodemo.features.common.domain.model.FiatCurrency
 import retrofit2.Call
 import timber.log.Timber
 import javax.inject.Inject
@@ -14,10 +15,10 @@ import javax.inject.Inject
 class CoinRetrofitDataSource
 @Inject constructor(
     private val coinService: CoinApiService,
-    private val coinMapper: CoinMapper,
+    private val coinMapper: CoinApiMapper,
 ) : CoinRemoteDataSource {
 
-    override suspend fun getCoin(coinId: String): Either<Failure, Coin> =
+    override suspend fun getCoin(coinId: String, first: FiatCurrency): Either<Failure, Coin> =
         request(
             call = coinService.getCoin(coinId),
             mapping = { coinApiModel ->
@@ -25,9 +26,14 @@ class CoinRetrofitDataSource
             }
         )
 
-    override suspend fun getCoinList(): Either<Failure, List<CoinSummary>> =
+    override suspend fun getCoinList(currency: FiatCurrency): Either<Failure, List<CoinSummary>> =
         request(
-            call = coinService.getCoins(),
+            call = coinService.getCoins(
+                currency = when (currency) {
+                    FiatCurrency.Eur -> "eur"
+                    FiatCurrency.Usd -> "usd"
+                }
+            ),
             mapping = { coinsSummaryApiModel ->
                 coinsSummaryApiModel.map { coinSummaryApiModel ->
                     coinMapper.mapCoinSummary(coinSummaryApiModel)

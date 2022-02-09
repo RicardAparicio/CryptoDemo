@@ -6,7 +6,7 @@ import com.ricardaparicio.cryptodemo.features.common.domain.model.Coin
 import com.ricardaparicio.cryptodemo.features.common.domain.model.CoinSummary
 import javax.inject.Inject
 
-class CoinMapper @Inject constructor() {
+class CoinApiMapper @Inject constructor() {
 
     fun mapCoinSummary(coinSummaryApiModel: CoinSummaryApiModel): CoinSummary =
         CoinSummary(

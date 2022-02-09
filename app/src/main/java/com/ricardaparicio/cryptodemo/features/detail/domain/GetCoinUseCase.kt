@@ -2,9 +2,9 @@ package com.ricardaparicio.cryptodemo.features.detail.domain
 
 import arrow.core.Either
 import com.ricardaparicio.cryptodemo.core.Failure
-import com.ricardaparicio.cryptodemo.core.UseCase
-import com.ricardaparicio.cryptodemo.core.UseCaseParams
-import com.ricardaparicio.cryptodemo.core.UseCaseResult
+import com.ricardaparicio.cryptodemo.core.usecase.UseCase
+import com.ricardaparicio.cryptodemo.core.usecase.UseCaseParams
+import com.ricardaparicio.cryptodemo.core.usecase.UseCaseResult
 import com.ricardaparicio.cryptodemo.features.common.data.repository.CoinRepository
 import com.ricardaparicio.cryptodemo.features.common.domain.model.Coin
 import com.ricardaparicio.cryptodemo.features.detail.domain.GetCoinUseCase.Params

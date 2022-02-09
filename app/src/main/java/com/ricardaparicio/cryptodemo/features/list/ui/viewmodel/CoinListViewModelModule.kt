@@ -6,7 +6,6 @@ import com.ricardaparicio.cryptodemo.features.list.ui.reducer.CoinListReducer
 import com.ricardaparicio.cryptodemo.features.list.ui.reducer.CoinListUiAction
 import dagger.Binds
 import dagger.Module
-import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ViewModelComponent
 

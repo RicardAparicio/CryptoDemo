@@ -35,4 +35,5 @@ data class CoinMarketDataApiModel(
 
 data class CoinPriceApiModel(
     val eur: Float,
+    val usd: Float,
 )
