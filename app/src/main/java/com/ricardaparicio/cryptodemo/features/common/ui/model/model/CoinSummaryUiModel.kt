@@ -18,17 +18,16 @@ data class CoinSummaryUiModel(
                 symbol = coinSummary.symbol,
                 name = coinSummary.name,
                 image = coinSummary.image,
-                price =
-                """ 
-                    ${coinSummary.price}
-                    ${
-                       when (coinSummary.fiatCurrency) {
-                           FiatCurrency.Eur -> "€"
-                           FiatCurrency.Usd -> "$"
-                       }
-                    }
-                """,
+                price = formatPrice(coinSummary),
                 marketCapPosition = coinSummary.marketCapRank.toString()
             )
+
+        private fun formatPrice(coinSummary: CoinSummary): String {
+            val symbol = when (coinSummary.fiatCurrency) {
+                FiatCurrency.Eur -> "€"
+                FiatCurrency.Usd -> "$"
+            }
+            return "${coinSummary.price} $symbol"
+        }
     }
 }

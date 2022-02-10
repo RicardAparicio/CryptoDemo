@@ -8,7 +8,6 @@ import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
@@ -36,7 +35,7 @@ private fun CoinList(
     onClickCoin: TypedBlock<CoinSummaryUiModel>,
     onClickCurrency: TypedBlock<FiatCurrency>
 ) {
-    Box {
+    Box(modifier = Modifier.fillMaxSize()) {
         if (uiState.loading) {
             LinearProgressIndicator()
         }
@@ -45,12 +44,13 @@ private fun CoinList(
             onClickCoin = onClickCoin
         )
         FloatingFiatCurrency(
-            modifier = Modifier.align(Alignment.BottomEnd),
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .padding(30.dp),
             onClickCurrency = onClickCurrency,
             uiState = uiState
         )
     }
-
 }
 
 @Composable
@@ -59,29 +59,23 @@ private fun FloatingFiatCurrency(
     onClickCurrency: TypedBlock<FiatCurrency>,
     uiState: CoinListUiState
 ) {
-    FloatingActionButton(
-        modifier = modifier
-            .clickable(
-                enabled = !uiState.loading,
-            ) { }
-            .alpha(
-                when (uiState.loading) {
-                    true -> 0.5f
-                    false -> 1f
-                }
-            ),
-        onClick = { onClickCurrency(uiState.fiatCurrency) }
-    ) {
-        Icon(
-            painter = painterResource(
-                when (uiState.fiatCurrency) {
-                    FiatCurrency.Eur -> R.drawable.ic_euro
-                    FiatCurrency.Usd -> R.drawable.ic_dollar
-                }
-            ),
-            contentDescription = null
-        )
+    if (!uiState.loading) {
+        FloatingActionButton(
+            modifier = modifier,
+            onClick = { onClickCurrency(uiState.fiatCurrency) }
+        ) {
+            Icon(
+                painter = painterResource(
+                    when (uiState.fiatCurrency) {
+                        FiatCurrency.Eur -> R.drawable.ic_euro
+                        FiatCurrency.Usd -> R.drawable.ic_dollar
+                    }
+                ),
+                contentDescription = null
+            )
+        }
     }
+
 }
 
 @Composable
@@ -90,6 +84,7 @@ private fun CoinLazyColumn(
     onClickCoin: TypedBlock<CoinSummaryUiModel>
 ) {
     LazyColumn(
+        modifier = Modifier.fillMaxWidth(),
         contentPadding = PaddingValues(horizontal = 30.dp, vertical = 30.dp)
     ) {
         val size = uiState.coins.size
@@ -110,7 +105,7 @@ private fun CoinItem(coinItem: CoinSummaryUiModel, onClickCoin: TypedBlock<CoinS
         .clickable { onClickCoin(coinItem) }
     ) {
         Row(
-            modifier = Modifier.padding(vertical = 10.dp, horizontal = 15.dp),
+            modifier = Modifier.padding(vertical = 15.dp, horizontal = 20.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
@@ -119,9 +114,9 @@ private fun CoinItem(coinItem: CoinSummaryUiModel, onClickCoin: TypedBlock<CoinS
                 text = coinItem.marketCapPosition,
                 style = MaterialTheme.typography.caption,
             )
-            Spacer(Modifier.width(20.dp))
+            Spacer(Modifier.width(15.dp))
             Image(
-                modifier = Modifier.size(40.dp),
+                modifier = Modifier.size(35.dp),
                 painter = rememberImagePainter(
                     data = coinItem.image,
                     builder = {
@@ -132,15 +127,18 @@ private fun CoinItem(coinItem: CoinSummaryUiModel, onClickCoin: TypedBlock<CoinS
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
             )
-            Spacer(Modifier.width(20.dp))
-            Column(verticalArrangement = Arrangement.Center) {
+            Spacer(Modifier.width(15.dp))
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                verticalArrangement = Arrangement.Center,
+            ) {
                 Text(
                     text = coinItem.symbol,
-                    style = MaterialTheme.typography.h6
+                    style = MaterialTheme.typography.subtitle1
                 )
                 Text(
                     text = coinItem.price,
-                    style = MaterialTheme.typography.h4
+                    style = MaterialTheme.typography.h5
                 )
             }
 

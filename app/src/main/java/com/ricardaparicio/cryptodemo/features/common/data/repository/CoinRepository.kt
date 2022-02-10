@@ -39,7 +39,7 @@ class CoinRepository
     private suspend fun Either<Failure, FiatCurrency>.flatMapToCoins(): Either<Failure, CoinListState.Coins> =
         flatMap { currency ->
             coinRemoteDataSource.getCoinList(currency).map { coins ->
-                CoinListState.Coins(coins)
+                CoinListState.Coins(coins, currency)
             }
         }
 }

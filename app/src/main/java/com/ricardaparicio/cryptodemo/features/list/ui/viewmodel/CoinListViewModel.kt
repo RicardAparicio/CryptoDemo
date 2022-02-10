@@ -38,7 +38,6 @@ class CoinListViewModel
     }
 
     fun onFiatCurrencyClicked(currency: FiatCurrency) {
-        reduce(CoinListUiAction.UpdateFiatCurrency(currency))
         updateFiatCurrency(currency)
     }
 
@@ -69,10 +68,13 @@ class CoinListViewModel
 
     private fun reduceCoinListResult(useCaseResult: GetCoinListUseCase.Result) =
         when (val coinState = useCaseResult.coinState) {
-            is CoinListState.Coins -> CoinListUiAction.NewCoins(coinState.coins)
-            CoinListState.Loading -> CoinListUiAction.Loading
-        }.run {
-            reduce(this)
+            is CoinListState.Coins -> {
+                reduce(CoinListUiAction.UpdateFiatCurrency(coinState.currency))
+                reduce(CoinListUiAction.NewCoins(coinState.coins))
+            }
+            CoinListState.Loading -> {
+                reduce(CoinListUiAction.Loading)
+            }
         }
 
     private fun reduce(action: CoinListUiAction) {
