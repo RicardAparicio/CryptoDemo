@@ -5,5 +5,6 @@ import com.ricardaparicio.cryptodemo.features.common.ui.model.model.CoinSummaryU
 
 data class CoinListUiState(
     val coins: List<CoinSummaryUiModel> = emptyList(),
-    val fiatCurrency: FiatCurrency
+    val fiatCurrency: FiatCurrency = FiatCurrency.Eur,
+    val loading: Boolean = false,
 )

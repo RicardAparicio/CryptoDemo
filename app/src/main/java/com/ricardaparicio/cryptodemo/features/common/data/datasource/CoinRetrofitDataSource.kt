@@ -1,6 +1,8 @@
 package com.ricardaparicio.cryptodemo.features.common.data.datasource
 
 import arrow.core.Either
+import arrow.core.left
+import arrow.core.right
 import com.ricardaparicio.cryptodemo.core.Failure
 import com.ricardaparicio.cryptodemo.core.NetworkingError
 import com.ricardaparicio.cryptodemo.core.ServerError
@@ -18,11 +20,11 @@ class CoinRetrofitDataSource
     private val coinMapper: CoinApiMapper,
 ) : CoinRemoteDataSource {
 
-    override suspend fun getCoin(coinId: String, first: FiatCurrency): Either<Failure, Coin> =
+    override suspend fun getCoin(coinId: String, currency: FiatCurrency): Either<Failure, Coin> =
         request(
             call = coinService.getCoin(coinId),
             mapping = { coinApiModel ->
-                coinMapper.mapCoin(coinApiModel)
+                coinMapper.mapCoin(coinApiModel, currency)
             }
         )
 
@@ -36,7 +38,7 @@ class CoinRetrofitDataSource
             ),
             mapping = { coinsSummaryApiModel ->
                 coinsSummaryApiModel.map { coinSummaryApiModel ->
-                    coinMapper.mapCoinSummary(coinSummaryApiModel)
+                    coinMapper.mapCoinSummary(coinSummaryApiModel, currency)
                 }
             }
         )
@@ -48,12 +50,12 @@ class CoinRetrofitDataSource
         kotlin.runCatching {
             val response = call.execute()
             when (response.isSuccessful) {
-                true -> Either.Right(mapping(requireNotNull(response.body())))
-                false -> Either.Left(ServerError)
+                true -> mapping(requireNotNull(response.body())).right()
+                false -> ServerError.left()
             }
         }.onFailure { throwable ->
             Timber.e(throwable)
         }.getOrElse {
-            Either.Left(NetworkingError)
+            NetworkingError.left()
         }
 }

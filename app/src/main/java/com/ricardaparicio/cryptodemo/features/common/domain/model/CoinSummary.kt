@@ -7,4 +7,5 @@ data class CoinSummary(
     val image: String,
     val price: Float,
     val marketCapRank: Int,
+    val fiatCurrency: FiatCurrency,
 )

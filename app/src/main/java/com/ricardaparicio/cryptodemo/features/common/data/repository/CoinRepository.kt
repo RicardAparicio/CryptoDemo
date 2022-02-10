@@ -2,15 +2,17 @@ package com.ricardaparicio.cryptodemo.features.common.data.repository
 
 import arrow.core.Either
 import arrow.core.flatMap
+import arrow.core.right
 import com.ricardaparicio.cryptodemo.core.Failure
 import com.ricardaparicio.cryptodemo.features.common.data.datasource.CoinLocalDataSource
 import com.ricardaparicio.cryptodemo.features.common.data.datasource.CoinRemoteDataSource
 import com.ricardaparicio.cryptodemo.features.common.domain.model.Coin
-import com.ricardaparicio.cryptodemo.features.common.domain.model.CoinSummary
+import com.ricardaparicio.cryptodemo.features.common.domain.model.CoinListState
 import com.ricardaparicio.cryptodemo.features.common.domain.model.FiatCurrency
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 class CoinRepository
@@ -26,11 +28,18 @@ class CoinRepository
             coinRemoteDataSource.getCoin(coinId, currency)
         }
 
-    suspend fun getCoinList(): Flow<Either<Failure, List<CoinSummary>>> =
-        coinLocalDataSource.fiatCurrencyFlow().map { currencyResult ->
-            currencyResult.flatMap { currency ->
-                coinRemoteDataSource.getCoinList(currency)
+    fun getCoinList(): Flow<Either<Failure, CoinListState>> =
+        flow {
+            coinLocalDataSource.fiatCurrencyFlow().collect { fiatResult ->
+                emit((CoinListState.Loading.right()))
+                emit(fiatResult.flatMapToCoins())
             }
         }
 
+    private suspend fun Either<Failure, FiatCurrency>.flatMapToCoins(): Either<Failure, CoinListState.Coins> =
+        flatMap { currency ->
+            coinRemoteDataSource.getCoinList(currency).map { coins ->
+                CoinListState.Coins(coins)
+            }
+        }
 }

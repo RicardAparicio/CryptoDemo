@@ -5,6 +5,8 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import arrow.core.Either
+import arrow.core.left
+import arrow.core.right
 import com.ricardaparicio.cryptodemo.core.Failure
 import com.ricardaparicio.cryptodemo.core.LocalError
 import com.ricardaparicio.cryptodemo.features.common.domain.model.FiatCurrency
@@ -19,25 +21,25 @@ class CoinPreferencesDataSource @Inject constructor(
 
     override fun fiatCurrencyFlow(): Flow<Either<Failure, FiatCurrency>> =
         dataStore.data.map { preferences ->
-            runSafety {
+            wrapEither {
                 FiatCurrency.valueOf(preferences[Keys.FIAT_CURRENCY] ?: FiatCurrency.Eur.name)
             }
         }
 
     override suspend fun updateFiatCurrency(currency: FiatCurrency): Either<Failure, Unit> =
-        runSafety {
+        wrapEither {
             dataStore.edit { preferences ->
                 preferences[Keys.FIAT_CURRENCY] = currency.name
             }
         }
 
-    private suspend fun <T : Any> runSafety(block: suspend () -> T): Either<Failure, T> =
+    private suspend fun <T : Any> wrapEither(block: suspend () -> T): Either<Failure, T> =
         runCatching {
-            Either.Right(block())
+            block().right()
         }.onFailure { error ->
             Timber.e(error)
         }.getOrElse {
-            Either.Left(LocalError)
+            LocalError.left()
         }
 
     private object Keys {

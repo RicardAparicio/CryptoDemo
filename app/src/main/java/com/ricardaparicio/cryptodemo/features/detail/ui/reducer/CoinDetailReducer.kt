@@ -3,8 +3,8 @@ package com.ricardaparicio.cryptodemo.features.detail.ui.reducer
 import com.ricardaparicio.cryptodemo.core.Reducer
 import com.ricardaparicio.cryptodemo.core.UiAction
 import com.ricardaparicio.cryptodemo.features.common.domain.model.Coin
-import com.ricardaparicio.cryptodemo.features.detail.ui.CoinDetailUiState
 import com.ricardaparicio.cryptodemo.features.common.ui.model.model.CoinSummaryUiModel
+import com.ricardaparicio.cryptodemo.features.detail.ui.CoinDetailUiState
 import javax.inject.Inject
 
 sealed class CoinDetailUiAction : UiAction {

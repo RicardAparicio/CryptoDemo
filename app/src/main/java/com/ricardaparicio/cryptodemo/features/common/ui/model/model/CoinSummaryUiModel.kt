@@ -1,6 +1,7 @@
 package com.ricardaparicio.cryptodemo.features.common.ui.model.model
 
 import com.ricardaparicio.cryptodemo.features.common.domain.model.CoinSummary
+import com.ricardaparicio.cryptodemo.features.common.domain.model.FiatCurrency
 
 data class CoinSummaryUiModel(
     val id: String = "",
@@ -17,7 +18,16 @@ data class CoinSummaryUiModel(
                 symbol = coinSummary.symbol,
                 name = coinSummary.name,
                 image = coinSummary.image,
-                price = "${coinSummary.price}€",
+                price =
+                """ 
+                    ${coinSummary.price}
+                    ${
+                       when (coinSummary.fiatCurrency) {
+                           FiatCurrency.Eur -> "€"
+                           FiatCurrency.Usd -> "$"
+                       }
+                    }
+                """,
                 marketCapPosition = coinSummary.marketCapRank.toString()
             )
     }

@@ -11,5 +11,5 @@ abstract class FlowUseCase<P : UseCaseParams, R : UseCaseResult>(
 ) {
     operator fun invoke(params: P): Flow<Either<Failure, R>> = doWork(params).flowOn(dispatcher)
 
-    abstract suspend fun doWork(params: P): Flow<Either<Failure, R>>
+    abstract fun doWork(params: P): Flow<Either<Failure, R>>
 }

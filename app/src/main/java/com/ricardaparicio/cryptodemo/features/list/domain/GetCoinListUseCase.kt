@@ -6,6 +6,7 @@ import com.ricardaparicio.cryptodemo.core.usecase.FlowUseCase
 import com.ricardaparicio.cryptodemo.core.usecase.NoParam
 import com.ricardaparicio.cryptodemo.core.usecase.UseCaseResult
 import com.ricardaparicio.cryptodemo.features.common.data.repository.CoinRepository
+import com.ricardaparicio.cryptodemo.features.common.domain.model.CoinListState
 import com.ricardaparicio.cryptodemo.features.common.domain.model.CoinSummary
 import com.ricardaparicio.cryptodemo.features.list.domain.GetCoinListUseCase.Result
 import kotlinx.coroutines.Dispatchers
@@ -16,9 +17,9 @@ import javax.inject.Inject
 class GetCoinListUseCase @Inject constructor(
     private val coinRepository: CoinRepository
 ) : FlowUseCase<NoParam, Result>(Dispatchers.IO) {
-    data class Result(val coins: List<CoinSummary>) : UseCaseResult
+    data class Result(val coinState: CoinListState) : UseCaseResult
 
-    override suspend fun doWork(params: NoParam): Flow<Either<Failure, Result>> =
+    override fun doWork(params: NoParam): Flow<Either<Failure, Result>> =
         coinRepository.getCoinList().map { coinsResult ->
             coinsResult.map { coins ->
                 Result(coins)

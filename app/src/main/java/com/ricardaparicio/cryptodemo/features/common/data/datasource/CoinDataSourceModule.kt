@@ -10,10 +10,8 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 interface CoinDataSourceModule {
     @Binds
-    @Singleton
     fun provideCoinRemoteDataSource(coinRetrofitDataSource: CoinRetrofitDataSource): CoinRemoteDataSource
 
     @Binds
-    @Singleton
     fun provideCoinLocalDataSource(coinPreferencesDataSource: CoinPreferencesDataSource): CoinLocalDataSource
 }

@@ -10,6 +10,7 @@ import com.ricardaparicio.cryptodemo.core.Failure
 import com.ricardaparicio.cryptodemo.core.Reducer
 import com.ricardaparicio.cryptodemo.core.usecase.NoParam
 import com.ricardaparicio.cryptodemo.core.util.doNothing
+import com.ricardaparicio.cryptodemo.features.common.domain.model.CoinListState
 import com.ricardaparicio.cryptodemo.features.common.domain.model.FiatCurrency
 import com.ricardaparicio.cryptodemo.features.list.domain.GetCoinListUseCase
 import com.ricardaparicio.cryptodemo.features.list.domain.UpdateFiatCurrencyUseCase
@@ -43,14 +44,13 @@ class CoinListViewModel
 
     private fun updateFiatCurrency(currency: FiatCurrency) {
         viewModelScope.launch {
-            // Progress
             updateFiatCurrencyUseCase(UpdateFiatCurrencyUseCase.Params(currency))
                 .fold(
                     {
                         reduce(CoinListUiAction.ErrorFiatCurrencyUpdate(currency))
                     },
                     {
-                        // finish progress
+                        doNothing()
                     }
                 )
         }
@@ -63,13 +63,17 @@ class CoinListViewModel
 
     private fun foldCoinListResult(result: Either<Failure, GetCoinListUseCase.Result>) =
         result.fold(
-            {
-                doNothing()
-            },
-            { useCaseResult ->
-                reduce(CoinListUiAction.NewCoins(useCaseResult.coins))
-            }
+            { doNothing() },
+            { useCaseResult -> reduceCoinListResult(useCaseResult) }
         )
+
+    private fun reduceCoinListResult(useCaseResult: GetCoinListUseCase.Result) =
+        when (val coinState = useCaseResult.coinState) {
+            is CoinListState.Coins -> CoinListUiAction.NewCoins(coinState.coins)
+            CoinListState.Loading -> CoinListUiAction.Loading
+        }.run {
+            reduce(this)
+        }
 
     private fun reduce(action: CoinListUiAction) {
         uiState = reducer.reduce(uiState, action)

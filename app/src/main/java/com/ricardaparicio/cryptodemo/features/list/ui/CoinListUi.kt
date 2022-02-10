@@ -4,30 +4,91 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.Card
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberImagePainter
 import coil.transform.CircleCropTransformation
+import com.ricardaparicio.cryptodemo.R
 import com.ricardaparicio.cryptodemo.core.util.TypedBlock
+import com.ricardaparicio.cryptodemo.features.common.domain.model.FiatCurrency
 import com.ricardaparicio.cryptodemo.features.common.ui.model.model.CoinSummaryUiModel
 import com.ricardaparicio.cryptodemo.features.list.ui.viewmodel.CoinListViewModel
 
 @Composable
 fun CoinListScreen(onClickCoin: TypedBlock<CoinSummaryUiModel>) {
     val viewModel = hiltViewModel<CoinListViewModel>()
-    CoinList(viewModel.uiState, onClickCoin)
+    CoinList(viewModel.uiState, onClickCoin) { currency ->
+        viewModel.onFiatCurrencyClicked(currency)
+    }
 }
 
 @Composable
-private fun CoinList(uiState: CoinListUiState, onClickCoin: TypedBlock<CoinSummaryUiModel>) {
+private fun CoinList(
+    uiState: CoinListUiState,
+    onClickCoin: TypedBlock<CoinSummaryUiModel>,
+    onClickCurrency: TypedBlock<FiatCurrency>
+) {
+    Box {
+        if (uiState.loading) {
+            LinearProgressIndicator()
+        }
+        CoinLazyColumn(
+            uiState = uiState,
+            onClickCoin = onClickCoin
+        )
+        FloatingFiatCurrency(
+            modifier = Modifier.align(Alignment.BottomEnd),
+            onClickCurrency = onClickCurrency,
+            uiState = uiState
+        )
+    }
+
+}
+
+@Composable
+private fun FloatingFiatCurrency(
+    modifier: Modifier,
+    onClickCurrency: TypedBlock<FiatCurrency>,
+    uiState: CoinListUiState
+) {
+    FloatingActionButton(
+        modifier = modifier
+            .clickable(
+                enabled = !uiState.loading,
+            ) { }
+            .alpha(
+                when (uiState.loading) {
+                    true -> 0.5f
+                    false -> 1f
+                }
+            ),
+        onClick = { onClickCurrency(uiState.fiatCurrency) }
+    ) {
+        Icon(
+            painter = painterResource(
+                when (uiState.fiatCurrency) {
+                    FiatCurrency.Eur -> R.drawable.ic_euro
+                    FiatCurrency.Usd -> R.drawable.ic_dollar
+                }
+            ),
+            contentDescription = null
+        )
+    }
+}
+
+@Composable
+private fun CoinLazyColumn(
+    uiState: CoinListUiState,
+    onClickCoin: TypedBlock<CoinSummaryUiModel>
+) {
     LazyColumn(
         contentPadding = PaddingValues(horizontal = 30.dp, vertical = 30.dp)
     ) {
