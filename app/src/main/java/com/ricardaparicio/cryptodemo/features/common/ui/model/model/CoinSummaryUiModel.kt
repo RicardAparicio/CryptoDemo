@@ -1,7 +1,10 @@
 package com.ricardaparicio.cryptodemo.features.common.ui.model.model
 
+import com.ricardaparicio.cryptodemo.core.util.formatPrice
 import com.ricardaparicio.cryptodemo.features.common.domain.model.CoinSummary
 import com.ricardaparicio.cryptodemo.features.common.domain.model.FiatCurrency
+import java.text.NumberFormat
+import java.util.*
 
 data class CoinSummaryUiModel(
     val id: String = "",
@@ -18,16 +21,8 @@ data class CoinSummaryUiModel(
                 symbol = coinSummary.symbol,
                 name = coinSummary.name,
                 image = coinSummary.image,
-                price = formatPrice(coinSummary),
+                price = coinSummary.price.formatPrice(coinSummary.fiatCurrency),
                 marketCapPosition = coinSummary.marketCapRank.toString()
             )
-
-        private fun formatPrice(coinSummary: CoinSummary): String {
-            val symbol = when (coinSummary.fiatCurrency) {
-                FiatCurrency.Eur -> "€"
-                FiatCurrency.Usd -> "$"
-            }
-            return "${coinSummary.price} $symbol"
-        }
     }
 }

@@ -7,5 +7,4 @@ data class Coin(
     val marketCap: Float,
     val priceChange24h: Float,
     val priceChangePercentage24h: Float,
-    val fiatCurrency: FiatCurrency,
 )

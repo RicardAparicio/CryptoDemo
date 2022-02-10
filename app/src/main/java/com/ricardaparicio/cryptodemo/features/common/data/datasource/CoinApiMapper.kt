@@ -45,6 +45,5 @@ class CoinApiMapper @Inject constructor() {
             },
             priceChange24h = coinApiModel.market_data.price_change_24h,
             priceChangePercentage24h = coinApiModel.market_data.price_change_percentage_24h,
-            fiatCurrency = currency,
         )
 }

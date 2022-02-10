@@ -2,6 +2,8 @@ package com.ricardaparicio.cryptodemo.features.detail.ui.reducer
 
 import com.ricardaparicio.cryptodemo.core.Reducer
 import com.ricardaparicio.cryptodemo.core.UiAction
+import com.ricardaparicio.cryptodemo.core.util.formatPercentage
+import com.ricardaparicio.cryptodemo.core.util.formatPrice
 import com.ricardaparicio.cryptodemo.features.common.domain.model.Coin
 import com.ricardaparicio.cryptodemo.features.common.ui.model.model.CoinSummaryUiModel
 import com.ricardaparicio.cryptodemo.features.detail.ui.CoinDetailUiState
@@ -16,10 +18,17 @@ class CoinDetailReducer @Inject constructor() : Reducer<CoinDetailUiState, CoinD
     override val reduce: (CoinDetailUiState, CoinDetailUiAction) -> CoinDetailUiState =
         { state, action ->
             when (action) {
-                is CoinDetailUiAction.NewCoin -> state.copy(
-                    coinSummary = CoinSummaryUiModel.from(action.coin.coinSummary),
-                    description = action.coin.description,
-                )
+                is CoinDetailUiAction.NewCoin -> {
+                    val coin = action.coin
+                    state.copy(
+                        coinSummary = CoinSummaryUiModel.from(coin.coinSummary),
+                        description = coin.description,
+                        ath = coin.ath.formatPrice(coin.coinSummary.fiatCurrency),
+                        marketCap = coin.marketCap.formatPrice(coin.coinSummary.fiatCurrency),
+                        priceChange24h = coin.priceChange24h.formatPercentage(),
+                        priceChangePercentage24h = coin.priceChangePercentage24h.formatPercentage()
+                    )
+                }
             }
         }
 }

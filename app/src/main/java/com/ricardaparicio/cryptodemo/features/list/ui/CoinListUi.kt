@@ -37,7 +37,7 @@ private fun CoinList(
 ) {
     Box(modifier = Modifier.fillMaxSize()) {
         if (uiState.loading) {
-            LinearProgressIndicator()
+            LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
         }
         CoinLazyColumn(
             uiState = uiState,
