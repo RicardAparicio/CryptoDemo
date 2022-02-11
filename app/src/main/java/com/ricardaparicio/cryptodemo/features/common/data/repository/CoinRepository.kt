@@ -20,8 +20,14 @@ class CoinRepository
     private val coinRemoteDataSource: CoinRemoteDataSource,
     private val coinLocalDataSource: CoinLocalDataSource,
 ) {
-    suspend fun updateFiatCurrency(currency: FiatCurrency): Either<Failure, Unit> =
-        coinLocalDataSource.updateFiatCurrency(currency)
+
+    suspend fun getFiatCurrency(): Either<Failure, FiatCurrency> =
+        coinLocalDataSource.fiatCurrencyFlow().first()
+
+    suspend fun updateFiatCurrency(currency: FiatCurrency): Either<Failure, FiatCurrency> =
+        coinLocalDataSource.updateFiatCurrency(currency).flatMap {
+            coinLocalDataSource.fiatCurrencyFlow().first()
+        }
 
     suspend fun getCoin(coinId: String): Either<Failure, Coin> =
         coinLocalDataSource.fiatCurrencyFlow().first().flatMap { currency ->
@@ -39,7 +45,7 @@ class CoinRepository
     private suspend fun Either<Failure, FiatCurrency>.flatMapToCoins(): Either<Failure, CoinListState.Coins> =
         flatMap { currency ->
             coinRemoteDataSource.getCoinList(currency).map { coins ->
-                CoinListState.Coins(coins, currency)
+                CoinListState.Coins(coins)
             }
         }
 }

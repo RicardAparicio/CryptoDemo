@@ -1,10 +1,7 @@
-package com.ricardaparicio.cryptodemo.features.common.ui.model.model
+package com.ricardaparicio.cryptodemo.features.common.ui.model
 
 import com.ricardaparicio.cryptodemo.core.util.formatPrice
 import com.ricardaparicio.cryptodemo.features.common.domain.model.CoinSummary
-import com.ricardaparicio.cryptodemo.features.common.domain.model.FiatCurrency
-import java.text.NumberFormat
-import java.util.*
 
 data class CoinSummaryUiModel(
     val id: String = "",
@@ -13,6 +10,7 @@ data class CoinSummaryUiModel(
     val name: String = "",
     val image: String = "",
     val price: String = "",
+    val error: AlertErrorUiModel? = null
 ) {
     companion object {
         fun from(coinSummary: CoinSummary): CoinSummaryUiModel =

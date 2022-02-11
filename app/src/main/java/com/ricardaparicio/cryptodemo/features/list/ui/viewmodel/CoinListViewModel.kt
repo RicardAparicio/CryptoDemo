@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import arrow.core.Either
 import com.ricardaparicio.cryptodemo.core.Failure
 import com.ricardaparicio.cryptodemo.core.Reducer
@@ -13,6 +14,7 @@ import com.ricardaparicio.cryptodemo.core.util.doNothing
 import com.ricardaparicio.cryptodemo.features.common.domain.model.CoinListState
 import com.ricardaparicio.cryptodemo.features.common.domain.model.FiatCurrency
 import com.ricardaparicio.cryptodemo.features.list.domain.GetCoinListUseCase
+import com.ricardaparicio.cryptodemo.features.list.domain.GetFiatCurrencyUseCase
 import com.ricardaparicio.cryptodemo.features.list.domain.UpdateFiatCurrencyUseCase
 import com.ricardaparicio.cryptodemo.features.list.ui.CoinListUiState
 import com.ricardaparicio.cryptodemo.features.list.ui.reducer.CoinListUiAction
@@ -26,6 +28,7 @@ import javax.inject.Inject
 class CoinListViewModel
 @Inject constructor(
     private val getCoinListUseCase: GetCoinListUseCase,
+    private val getFiatCurrencyUseCase: GetFiatCurrencyUseCase,
     private val updateFiatCurrencyUseCase: UpdateFiatCurrencyUseCase,
     private val reducer: Reducer<CoinListUiState, CoinListUiAction>,
 ) : ViewModel() {
@@ -34,7 +37,22 @@ class CoinListViewModel
         private set
 
     init {
-        fetchCoins()
+        viewModelScope.launch {
+            fetchFiatCurrency()
+            fetchCoins()
+        }
+    }
+
+    private suspend fun fetchFiatCurrency() {
+        getFiatCurrencyUseCase(NoParam)
+            .fold(
+                { failure ->
+                    reduce(CoinListUiAction.Error(failure))
+                },
+                { result ->
+                    reduce(CoinListUiAction.UpdateFiatCurrency(result.currency))
+                }
+            )
     }
 
     fun onFiatCurrencyClicked(currency: FiatCurrency) {
@@ -45,11 +63,12 @@ class CoinListViewModel
         viewModelScope.launch {
             updateFiatCurrencyUseCase(UpdateFiatCurrencyUseCase.Params(currency))
                 .fold(
-                    {
-                        reduce(CoinListUiAction.ErrorFiatCurrencyUpdate(currency))
+                    { failure ->
+                        reduce(CoinListUiAction.Error(failure))
                     },
-                    {
-                        doNothing()
+                    { result ->
+                        reduce(CoinListUiAction.UpdateFiatCurrency(result.currency))
+
                     }
                 )
         }
@@ -62,14 +81,17 @@ class CoinListViewModel
 
     private fun foldCoinListResult(result: Either<Failure, GetCoinListUseCase.Result>) =
         result.fold(
-            { doNothing() },
-            { useCaseResult -> reduceCoinListResult(useCaseResult) }
+            { failure ->
+                reduce(CoinListUiAction.Error(failure))
+            },
+            { useCaseResult ->
+                reduceCoinListResult(useCaseResult)
+            }
         )
 
     private fun reduceCoinListResult(useCaseResult: GetCoinListUseCase.Result) =
         when (val coinState = useCaseResult.coinState) {
             is CoinListState.Coins -> {
-                reduce(CoinListUiAction.UpdateFiatCurrency(coinState.currency))
                 reduce(CoinListUiAction.NewCoins(coinState.coins))
             }
             CoinListState.Loading -> {
@@ -79,5 +101,9 @@ class CoinListViewModel
 
     private fun reduce(action: CoinListUiAction) {
         uiState = reducer.reduce(uiState, action)
+    }
+
+    fun onDismissDialogRequested() {
+        reduce(CoinListUiAction.DismissError)
     }
 }

@@ -1,18 +1,22 @@
 package com.ricardaparicio.cryptodemo.features.list.ui.reducer
 
+import com.ricardaparicio.cryptodemo.core.Failure
 import com.ricardaparicio.cryptodemo.core.Reducer
 import com.ricardaparicio.cryptodemo.core.UiAction
 import com.ricardaparicio.cryptodemo.features.common.domain.model.CoinSummary
 import com.ricardaparicio.cryptodemo.features.common.domain.model.FiatCurrency
+import com.ricardaparicio.cryptodemo.features.common.ui.model.AlertErrorUiModel
+import com.ricardaparicio.cryptodemo.features.common.ui.model.CoinSummaryUiModel
 import com.ricardaparicio.cryptodemo.features.list.ui.CoinListUiState
-import com.ricardaparicio.cryptodemo.features.common.ui.model.model.CoinSummaryUiModel
 import javax.inject.Inject
 
 sealed class CoinListUiAction : UiAction {
     object Loading : CoinListUiAction()
     data class NewCoins(val coins: List<CoinSummary>) : CoinListUiAction()
-    data class ErrorFiatCurrencyUpdate(val currency: FiatCurrency) : CoinListUiAction()
     data class UpdateFiatCurrency(val currency: FiatCurrency) : CoinListUiAction()
+    data class ErrorUpdateFiatCurrency(val currency: FiatCurrency) : CoinListUiAction()
+    data class Error(val failure: Failure) : CoinListUiAction()
+    object DismissError : CoinListUiAction()
 }
 
 class CoinListReducer @Inject constructor() : Reducer<CoinListUiState, CoinListUiAction> {
@@ -27,7 +31,7 @@ class CoinListReducer @Inject constructor() : Reducer<CoinListUiState, CoinListU
                     loading = false,
                 )
             }
-            is CoinListUiAction.ErrorFiatCurrencyUpdate -> {
+            is CoinListUiAction.ErrorUpdateFiatCurrency -> {
                 state.copy(
                     fiatCurrency = action.currency,
                     loading = false,
@@ -44,6 +48,17 @@ class CoinListReducer @Inject constructor() : Reducer<CoinListUiState, CoinListU
             CoinListUiAction.Loading -> {
                 state.copy(
                     loading = true,
+                )
+            }
+            CoinListUiAction.DismissError -> {
+                state.copy(
+                    error = null
+                )
+            }
+            is CoinListUiAction.Error -> {
+                state.copy(
+                    error = AlertErrorUiModel.from(action.failure),
+                    loading = false,
                 )
             }
         }

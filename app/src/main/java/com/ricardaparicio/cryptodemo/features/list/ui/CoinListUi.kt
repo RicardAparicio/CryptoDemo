@@ -16,24 +16,30 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberImagePainter
 import coil.transform.CircleCropTransformation
 import com.ricardaparicio.cryptodemo.R
+import com.ricardaparicio.cryptodemo.core.util.Block
 import com.ricardaparicio.cryptodemo.core.util.TypedBlock
 import com.ricardaparicio.cryptodemo.features.common.domain.model.FiatCurrency
-import com.ricardaparicio.cryptodemo.features.common.ui.model.model.CoinSummaryUiModel
+import com.ricardaparicio.cryptodemo.features.common.ui.model.AlertError
+import com.ricardaparicio.cryptodemo.features.common.ui.model.CoinSummaryUiModel
 import com.ricardaparicio.cryptodemo.features.list.ui.viewmodel.CoinListViewModel
 
 @Composable
 fun CoinListScreen(onClickCoin: TypedBlock<CoinSummaryUiModel>) {
     val viewModel = hiltViewModel<CoinListViewModel>()
-    CoinList(viewModel.uiState, onClickCoin) { currency ->
-        viewModel.onFiatCurrencyClicked(currency)
-    }
+    CoinList(
+        uiState = viewModel.uiState,
+        onClickCoin = onClickCoin,
+        onClickCurrency = { currency -> viewModel.onFiatCurrencyClicked(currency) },
+        onClickDismissError = { viewModel.onDismissDialogRequested() }
+    )
 }
 
 @Composable
 private fun CoinList(
     uiState: CoinListUiState,
     onClickCoin: TypedBlock<CoinSummaryUiModel>,
-    onClickCurrency: TypedBlock<FiatCurrency>
+    onClickCurrency: TypedBlock<FiatCurrency>,
+    onClickDismissError: Block,
 ) {
     Box(modifier = Modifier.fillMaxSize()) {
         if (uiState.loading) {
@@ -50,6 +56,14 @@ private fun CoinList(
             onClickCurrency = onClickCurrency,
             uiState = uiState
         )
+        uiState.error?.let {
+            AlertError(
+                modifier = Modifier.align(Alignment.Center),
+                model = uiState.error
+            ) {
+                onClickDismissError()
+            }
+        }
     }
 }
 
