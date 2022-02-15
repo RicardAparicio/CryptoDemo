@@ -27,6 +27,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberImagePainter
 import com.ricardaparicio.cryptodemo.R
 import com.ricardaparicio.cryptodemo.core.util.Block
+import com.ricardaparicio.cryptodemo.features.common.ui.AlertError
 import com.ricardaparicio.cryptodemo.features.detail.ui.viewmodel.CoinDetailViewModel
 
 @ExperimentalMaterialApi
@@ -36,6 +37,7 @@ fun CoinDetailScreen(onBackClicked: Block) {
     CoinDetail(
         uiState = viewModel.uiState,
         onBackClicked = onBackClicked,
+        onClickDismissError = viewModel::onDismissDialogRequested
     )
 }
 
@@ -44,6 +46,7 @@ fun CoinDetailScreen(onBackClicked: Block) {
 private fun CoinDetail(
     uiState: CoinDetailUiState,
     onBackClicked: Block,
+    onClickDismissError: Block,
 ) {
     val lazyListState = rememberLazyListState()
 
@@ -74,6 +77,18 @@ private fun CoinDetail(
         if (!appBarVisibility) {
             FloatingBackIcon {
                 onBackClicked()
+            }
+        }
+        if (uiState.contentLoadingUiState.loading) {
+            LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
+        }
+
+        uiState.contentLoadingUiState.error?.let {
+            AlertError(
+                modifier = Modifier.align(Alignment.Center),
+                model = uiState.contentLoadingUiState.error
+            ) {
+                onClickDismissError()
             }
         }
     }

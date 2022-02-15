@@ -19,7 +19,7 @@ import com.ricardaparicio.cryptodemo.R
 import com.ricardaparicio.cryptodemo.core.util.Block
 import com.ricardaparicio.cryptodemo.core.util.TypedBlock
 import com.ricardaparicio.cryptodemo.features.common.domain.model.FiatCurrency
-import com.ricardaparicio.cryptodemo.features.common.ui.model.AlertError
+import com.ricardaparicio.cryptodemo.features.common.ui.AlertError
 import com.ricardaparicio.cryptodemo.features.common.ui.model.CoinSummaryUiModel
 import com.ricardaparicio.cryptodemo.features.list.ui.viewmodel.CoinListViewModel
 
@@ -42,13 +42,15 @@ private fun CoinList(
     onClickDismissError: Block,
 ) {
     Box(modifier = Modifier.fillMaxSize()) {
-        if (uiState.loading) {
-            LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
-        }
         CoinLazyColumn(
             uiState = uiState,
             onClickCoin = onClickCoin
         )
+
+        if (uiState.contentLoadingUiState.loading) {
+            LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
+        }
+
         FloatingFiatCurrency(
             modifier = Modifier
                 .align(Alignment.BottomEnd)
@@ -56,10 +58,11 @@ private fun CoinList(
             onClickCurrency = onClickCurrency,
             uiState = uiState
         )
-        uiState.error?.let {
+
+        uiState.contentLoadingUiState.error?.let {
             AlertError(
                 modifier = Modifier.align(Alignment.Center),
-                model = uiState.error
+                model = uiState.contentLoadingUiState.error
             ) {
                 onClickDismissError()
             }
@@ -73,7 +76,7 @@ private fun FloatingFiatCurrency(
     onClickCurrency: TypedBlock<FiatCurrency>,
     uiState: CoinListUiState
 ) {
-    if (!uiState.loading) {
+    if (!uiState.contentLoadingUiState.loading) {
         FloatingActionButton(
             modifier = modifier,
             onClick = { onClickCurrency(uiState.fiatCurrency) }

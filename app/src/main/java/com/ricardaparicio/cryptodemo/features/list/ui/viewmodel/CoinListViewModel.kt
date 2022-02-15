@@ -5,19 +5,19 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import arrow.core.Either
 import com.ricardaparicio.cryptodemo.core.Failure
 import com.ricardaparicio.cryptodemo.core.Reducer
 import com.ricardaparicio.cryptodemo.core.usecase.NoParam
-import com.ricardaparicio.cryptodemo.core.util.doNothing
 import com.ricardaparicio.cryptodemo.features.common.domain.model.CoinListState
 import com.ricardaparicio.cryptodemo.features.common.domain.model.FiatCurrency
+import com.ricardaparicio.cryptodemo.features.common.ui.reducer.ContentLoadingUiAction
 import com.ricardaparicio.cryptodemo.features.list.domain.GetCoinListUseCase
 import com.ricardaparicio.cryptodemo.features.list.domain.GetFiatCurrencyUseCase
 import com.ricardaparicio.cryptodemo.features.list.domain.UpdateFiatCurrencyUseCase
 import com.ricardaparicio.cryptodemo.features.list.ui.CoinListUiState
 import com.ricardaparicio.cryptodemo.features.list.ui.reducer.CoinListUiAction
+import com.ricardaparicio.cryptodemo.features.list.ui.reducer.CoinListUiAction.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -47,16 +47,12 @@ class CoinListViewModel
         getFiatCurrencyUseCase(NoParam)
             .fold(
                 { failure ->
-                    reduce(CoinListUiAction.Error(failure))
+                    reduce(UpdateContentLoading(ContentLoadingUiAction.Error(failure)))
                 },
                 { result ->
-                    reduce(CoinListUiAction.UpdateFiatCurrency(result.currency))
+                    reduce(UpdateFiatCurrency(result.currency))
                 }
             )
-    }
-
-    fun onFiatCurrencyClicked(currency: FiatCurrency) {
-        updateFiatCurrency(currency)
     }
 
     private fun updateFiatCurrency(currency: FiatCurrency) {
@@ -64,10 +60,10 @@ class CoinListViewModel
             updateFiatCurrencyUseCase(UpdateFiatCurrencyUseCase.Params(currency))
                 .fold(
                     { failure ->
-                        reduce(CoinListUiAction.Error(failure))
+                        reduce(UpdateContentLoading(ContentLoadingUiAction.Error(failure)))
                     },
                     { result ->
-                        reduce(CoinListUiAction.UpdateFiatCurrency(result.currency))
+                        reduce(UpdateFiatCurrency(result.currency))
 
                     }
                 )
@@ -82,7 +78,7 @@ class CoinListViewModel
     private fun foldCoinListResult(result: Either<Failure, GetCoinListUseCase.Result>) =
         result.fold(
             { failure ->
-                reduce(CoinListUiAction.Error(failure))
+                reduce(UpdateContentLoading(ContentLoadingUiAction.Error(failure)))
             },
             { useCaseResult ->
                 reduceCoinListResult(useCaseResult)
@@ -92,10 +88,11 @@ class CoinListViewModel
     private fun reduceCoinListResult(useCaseResult: GetCoinListUseCase.Result) =
         when (val coinState = useCaseResult.coinState) {
             is CoinListState.Coins -> {
-                reduce(CoinListUiAction.NewCoins(coinState.coins))
+                reduce(NewCoins(coinState.coins))
+                reduce(UpdateContentLoading(ContentLoadingUiAction.Success))
             }
             CoinListState.Loading -> {
-                reduce(CoinListUiAction.Loading)
+                reduce(UpdateContentLoading(ContentLoadingUiAction.Loading))
             }
         }
 
@@ -103,7 +100,11 @@ class CoinListViewModel
         uiState = reducer.reduce(uiState, action)
     }
 
+    fun onFiatCurrencyClicked(currency: FiatCurrency) {
+        updateFiatCurrency(currency)
+    }
+
     fun onDismissDialogRequested() {
-        reduce(CoinListUiAction.DismissError)
+        reduce(UpdateContentLoading(ContentLoadingUiAction.CloseError))
     }
 }
