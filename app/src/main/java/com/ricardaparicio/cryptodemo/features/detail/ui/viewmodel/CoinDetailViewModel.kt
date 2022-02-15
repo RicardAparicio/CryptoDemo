@@ -8,10 +8,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ricardaparicio.cryptodemo.core.Reducer
 import com.ricardaparicio.cryptodemo.core.navigation.NavArg
-import com.ricardaparicio.cryptodemo.core.util.doNothing
+import com.ricardaparicio.cryptodemo.features.common.ui.reducer.ContentLoadingUiAction
 import com.ricardaparicio.cryptodemo.features.detail.domain.GetCoinUseCase
 import com.ricardaparicio.cryptodemo.features.detail.ui.CoinDetailUiState
 import com.ricardaparicio.cryptodemo.features.detail.ui.reducer.CoinDetailUiAction
+import com.ricardaparicio.cryptodemo.features.detail.ui.reducer.CoinDetailUiAction.NewCoin
+import com.ricardaparicio.cryptodemo.features.detail.ui.reducer.CoinDetailUiAction.UpdateContentLoading
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -37,21 +39,25 @@ class CoinDetailViewModel @Inject constructor(
 
     private fun fetchCoin() =
         viewModelScope.launch {
+            reduce(UpdateContentLoading(ContentLoadingUiAction.Loading))
             getCoinUseCase(GetCoinUseCase.Params(coinId))
                 .fold(
-                    {
-                        doNothing()
+                    { failure ->
+                        reduce(UpdateContentLoading(ContentLoadingUiAction.Error(failure)))
                     },
                     { result ->
-                        reduce(
-                            CoinDetailUiAction.NewCoin(result.coin)
-                        )
+                        reduce(NewCoin(result.coin))
+                        reduce(UpdateContentLoading(ContentLoadingUiAction.Success))
                     }
                 )
         }
 
     private fun reduce(action: CoinDetailUiAction) {
         uiState = reducer.reduce(uiState, action)
+    }
+
+    fun onDismissDialogRequested() {
+        reduce(UpdateContentLoading(ContentLoadingUiAction.CloseError))
     }
 
 }
