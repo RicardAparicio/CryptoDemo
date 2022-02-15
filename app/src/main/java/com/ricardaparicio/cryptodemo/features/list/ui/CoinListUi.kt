@@ -1,6 +1,7 @@
 package com.ricardaparicio.cryptodemo.features.list.ui
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -101,7 +102,7 @@ private fun CoinLazyColumn(
     onClickCoin: TypedBlock<CoinSummaryUiModel>
 ) {
     LazyColumn(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxSize().background(MaterialTheme.colors.background),
         contentPadding = PaddingValues(horizontal = 30.dp, vertical = 30.dp)
     ) {
         val size = uiState.coins.size

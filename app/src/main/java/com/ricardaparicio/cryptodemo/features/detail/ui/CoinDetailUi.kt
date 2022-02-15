@@ -30,7 +30,6 @@ import com.ricardaparicio.cryptodemo.R
 import com.ricardaparicio.cryptodemo.core.util.Block
 import com.ricardaparicio.cryptodemo.features.common.ui.AlertError
 import com.ricardaparicio.cryptodemo.features.detail.ui.viewmodel.CoinDetailViewModel
-import com.ricardaparicio.cryptodemo.ui.theme.SoftGray
 
 @ExperimentalMaterialApi
 @Composable
@@ -168,12 +167,12 @@ private fun CoinInfoItem(title: String, text: String) {
     Column(modifier = Modifier.fillMaxWidth()) {
         Text(
             text = title,
-            style = MaterialTheme.typography.subtitle2
+            style = MaterialTheme.typography.subtitle1
         )
         Text(
             text = text,
             overflow = TextOverflow.Ellipsis,
-            style = MaterialTheme.typography.subtitle1
+            style = MaterialTheme.typography.subtitle2
         )
     }
 }
@@ -183,11 +182,9 @@ private fun Content(
     uiState: CoinDetailUiState,
     lazyListState: LazyListState,
 ) {
-    Box {
+    Surface {
         LazyColumn(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(MaterialTheme.colors.background),
+            modifier = Modifier.fillMaxSize(),
             state = lazyListState,
         ) {
             item {
@@ -252,7 +249,7 @@ private fun CoinImage(
         modifier = Modifier
             .fillMaxWidth()
             .height(190.dp)
-            .background(SoftGray)
+            .background(MaterialTheme.colors.primaryVariant)
             .alpha(
                 when (lazyListState.firstVisibleItemIndex) {
                     0 -> 1 - (lazyListState.firstVisibleItemScrollOffset / (effectDivider * 100))
