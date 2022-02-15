@@ -21,6 +21,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -29,6 +30,7 @@ import com.ricardaparicio.cryptodemo.R
 import com.ricardaparicio.cryptodemo.core.util.Block
 import com.ricardaparicio.cryptodemo.features.common.ui.AlertError
 import com.ricardaparicio.cryptodemo.features.detail.ui.viewmodel.CoinDetailViewModel
+import com.ricardaparicio.cryptodemo.ui.theme.SoftGray
 
 @ExperimentalMaterialApi
 @Composable
@@ -124,7 +126,56 @@ private fun FloatingBackIcon(
 private fun CoinInfo(
     uiState: CoinDetailUiState,
 ) {
-    Text(text = uiState.description)
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 20.dp, vertical = 15.dp)
+    ) {
+        CoinInfoItem(
+            title = stringResource(R.string.coin_market_cap_position),
+            text = uiState.coinSummary.marketCapPosition
+        )
+        Spacer(modifier = Modifier.height(15.dp))
+        CoinInfoItem(
+            title = stringResource(R.string.coin_current_price),
+            text = uiState.coinSummary.price
+        )
+        Spacer(modifier = Modifier.height(15.dp))
+        CoinInfoItem(
+            title = stringResource(R.string.coin_ath),
+            text = uiState.ath
+        )
+        Spacer(modifier = Modifier.height(15.dp))
+        CoinInfoItem(
+            title = stringResource(R.string.coin_price_change_24h),
+            text = uiState.priceChange24h
+        )
+        Spacer(modifier = Modifier.height(15.dp))
+        CoinInfoItem(
+            title = stringResource(R.string.coin_price_percentage_change_24h),
+            text = uiState.priceChangePercentage24h
+        )
+        Spacer(modifier = Modifier.height(15.dp))
+        CoinInfoItem(
+            title = stringResource(R.string.coin_description),
+            text = uiState.description
+        )
+    }
+}
+
+@Composable
+private fun CoinInfoItem(title: String, text: String) {
+    Column(modifier = Modifier.fillMaxWidth()) {
+        Text(
+            text = title,
+            style = MaterialTheme.typography.subtitle2
+        )
+        Text(
+            text = text,
+            overflow = TextOverflow.Ellipsis,
+            style = MaterialTheme.typography.subtitle1
+        )
+    }
 }
 
 @Composable
@@ -200,8 +251,8 @@ private fun CoinImage(
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .height(160.dp)
-            .background(Color.Gray)
+            .height(190.dp)
+            .background(SoftGray)
             .alpha(
                 when (lazyListState.firstVisibleItemIndex) {
                     0 -> 1 - (lazyListState.firstVisibleItemScrollOffset / (effectDivider * 100))

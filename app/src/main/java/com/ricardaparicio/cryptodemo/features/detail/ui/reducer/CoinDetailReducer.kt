@@ -25,12 +25,13 @@ class CoinDetailReducer @Inject constructor(
             when (action) {
                 is CoinDetailUiAction.NewCoin -> {
                     val coin = action.coin
+                    val fiatCurrency = coin.coinSummary.fiatCurrency
                     state.copy(
                         coinSummary = CoinSummaryUiModel.from(coin.coinSummary),
                         description = coin.description,
-                        ath = coin.ath.formatPrice(coin.coinSummary.fiatCurrency),
-                        marketCap = coin.marketCap.formatPrice(coin.coinSummary.fiatCurrency),
-                        priceChange24h = coin.priceChange24h.formatPercentage(),
+                        ath = coin.ath.formatPrice(fiatCurrency),
+                        marketCap = coin.marketCap.formatPrice(fiatCurrency),
+                        priceChange24h = coin.priceChange24h.formatPrice(fiatCurrency),
                         priceChangePercentage24h = coin.priceChangePercentage24h.formatPercentage(),
                     )
                 }
