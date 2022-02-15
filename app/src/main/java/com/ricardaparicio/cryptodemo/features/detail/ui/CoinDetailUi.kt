@@ -30,6 +30,7 @@ import com.ricardaparicio.cryptodemo.R
 import com.ricardaparicio.cryptodemo.core.util.Block
 import com.ricardaparicio.cryptodemo.features.common.ui.AlertError
 import com.ricardaparicio.cryptodemo.features.detail.ui.viewmodel.CoinDetailViewModel
+import com.ricardaparicio.cryptodemo.ui.theme.Boulder
 
 @ExperimentalMaterialApi
 @Composable
@@ -249,7 +250,7 @@ private fun CoinImage(
         modifier = Modifier
             .fillMaxWidth()
             .height(190.dp)
-            .background(MaterialTheme.colors.primaryVariant)
+            .background(Boulder)
             .alpha(
                 when (lazyListState.firstVisibleItemIndex) {
                     0 -> 1 - (lazyListState.firstVisibleItemScrollOffset / (effectDivider * 100))
