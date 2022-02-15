@@ -6,17 +6,19 @@ import com.ricardaparicio.cryptodemo.core.util.formatPercentage
 import com.ricardaparicio.cryptodemo.core.util.formatPrice
 import com.ricardaparicio.cryptodemo.features.common.domain.model.Coin
 import com.ricardaparicio.cryptodemo.features.common.ui.model.CoinSummaryUiModel
+import com.ricardaparicio.cryptodemo.features.common.ui.reducer.ContentLoadingReducer
 import com.ricardaparicio.cryptodemo.features.common.ui.reducer.ContentLoadingUiAction
-import com.ricardaparicio.cryptodemo.features.common.ui.reducer.contentLoadingReduce
 import com.ricardaparicio.cryptodemo.features.detail.ui.CoinDetailUiState
 import javax.inject.Inject
 
 sealed class CoinDetailUiAction : UiAction {
     data class NewCoin(val coin: Coin) : CoinDetailUiAction()
-    data class UpdateContentLoading(val action: ContentLoadingUiAction): CoinDetailUiAction()
+    data class UpdateContentLoading(val action: ContentLoadingUiAction) : CoinDetailUiAction()
 }
 
-class CoinDetailReducer @Inject constructor() : Reducer<CoinDetailUiState, CoinDetailUiAction> {
+class CoinDetailReducer @Inject constructor(
+    contentLoadingReducer: ContentLoadingReducer
+) : Reducer<CoinDetailUiState, CoinDetailUiAction> {
 
     override val reduce: (CoinDetailUiState, CoinDetailUiAction) -> CoinDetailUiState =
         { state, action ->
@@ -34,7 +36,10 @@ class CoinDetailReducer @Inject constructor() : Reducer<CoinDetailUiState, CoinD
                 }
                 is CoinDetailUiAction.UpdateContentLoading -> {
                     state.copy(
-                        contentLoadingUiState = contentLoadingReduce(state.contentLoadingUiState, action.action)
+                        contentLoadingUiState = contentLoadingReducer.reduce(
+                            state.contentLoadingUiState,
+                            action.action
+                        )
                     )
                 }
             }
