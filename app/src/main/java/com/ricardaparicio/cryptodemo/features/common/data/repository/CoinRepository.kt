@@ -9,6 +9,7 @@ import com.ricardaparicio.cryptodemo.features.common.data.datasource.CoinRemoteD
 import com.ricardaparicio.cryptodemo.features.common.domain.model.Coin
 import com.ricardaparicio.cryptodemo.features.common.domain.model.CoinListState
 import com.ricardaparicio.cryptodemo.features.common.domain.model.FiatCurrency
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.first
@@ -31,6 +32,7 @@ class CoinRepository
 
     suspend fun getCoin(coinId: String): Either<Failure, Coin> =
         coinLocalDataSource.fiatCurrencyFlow().first().flatMap { currency ->
+            delay(1000)
             coinRemoteDataSource.getCoin(coinId, currency)
         }
 
@@ -44,6 +46,7 @@ class CoinRepository
 
     private suspend fun Either<Failure, FiatCurrency>.flatMapToCoins(): Either<Failure, CoinListState.Coins> =
         flatMap { currency ->
+            delay(1000)
             coinRemoteDataSource.getCoinList(currency).map { coins ->
                 CoinListState.Coins(coins)
             }
