@@ -8,8 +8,8 @@ I kept it simple with the idea to focus on the architecture concepts instead of 
 I've tried to touch the most trending frameworks, design paradigms like functional or reactive programming and last approaches which I've been working on in the last months and years. To name a few of them:
 
 - Kotlin Coroutines and Flow → Language-native asynchronous tasks, concurrency and reactive programming.
-- Arrow (concretely the Either class) → for wrapping the results of the UseCase’s.
-- Redux (custom approach) → for transforming DOMAIN dataset into something more concrete for the UI.
+- Arrow (concretely the Either class) → Wrapping the results of the UseCase’s and Data layer.
+- Redux (custom approach) → Transforming DOMAIN dataset into something more concrete for the UI through different Actions.
 - Dagger Hilt → Dependency injection.
 - Compose UI → Most recent and modern toolkit for render Android Views, a game changer! 🤯
 
@@ -21,13 +21,13 @@ Build under the SOLID principles and Clean Architecture values, inspired on the 
 
 Always [YAGNI](https://es.wikipedia.org/wiki/YAGNI) principle in mind, one of my favourites!
 
-### Package organisation
+### Package organisation.
 
-- core → Base clases and utilities.
-- features → Self explaining 😃.
+- core → Base classes and utilities.
+- features → All the app capabilities separated in specific packages.
 - theme → Compose themming stuff.
 
-Every feature may have 3 main packages corresponding to Clean Architecture layers idea, I’ve logically divided in: **DATA, DOMAIN** and **PRESENTATION.**
+Every feature may have 3 main packages corresponding to Clean Architecture layers concept, I’ve logically divided in: **DATA, DOMAIN** and **PRESENTATION.**
 
 ## DATA Layer.
 
@@ -117,13 +117,13 @@ Back to the technically speaking, this part simply renders what the `UiState` of
 
 <em>Happy path example of Coin Detail screen. (Loading and error renderings are omited.)</em>
 
-# Modulation or Monolith?
+# Modulation or Monolithic?
 
 It’s just a balance in between how big is/will be the app, how many people will work on and the development time we have.
 
 Modulation creates an extra level of abstraction and boundaries between the architecture pieces, witch allows work in parallel without disturb each other, but also generates an overload on development times. For me would worth it for medium-large apps with maintenance in the future and multiple devs in the team, otherwise I’d prefer monoliths.
 
-This App is a Monolith for the reasons above and because I think its fast to analyse for the other people 😃  but... In case of applying modulation, I’d considere two different scenarios:
+This App is Monolithic for the reasons above and because I think its fast to analyse for the other people 😃  but... In case of applying modulation, I’d considere two different scenarios:
 
 1. Modularised by arch. layer (DATA, DOMAIN and PRESENTATION).
 2. Modularised by features.

@@ -32,7 +32,6 @@ class CoinRepository
 
     suspend fun getCoin(coinId: String): Either<Failure, Coin> =
         coinLocalDataSource.fiatCurrencyFlow().first().flatMap { currency ->
-            delay(1000)
             coinRemoteDataSource.getCoin(coinId, currency)
         }
 
@@ -46,7 +45,6 @@ class CoinRepository
 
     private suspend fun Either<Failure, FiatCurrency>.flatMapToCoins(): Either<Failure, CoinListState.Coins> =
         flatMap { currency ->
-            delay(1000)
             coinRemoteDataSource.getCoinList(currency).map { coins ->
                 CoinListState.Coins(coins)
             }
