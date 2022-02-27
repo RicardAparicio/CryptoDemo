@@ -7,7 +7,7 @@ I kept it simple with the idea to focus on the architecture concepts instead of 
 
 I've tried to touch the most trending frameworks, design paradigms like functional or reactive programming and last approaches which I've been working on in the last months and years. To name a few of them:
 
-- Kotlin Coroutines and Flow → Language-native asynchronous tasks, concurrency and reactive programming.
+- Kotlin Coroutines → Language-native for asynchronous tasks, concurrency and reactive programming (Flow).
 - Arrow (concretely the Either class) → Wrapping the results of the UseCase’s and Data layer.
 - Redux (custom approach) → Transforming DOMAIN dataset into something more concrete for the UI through different Actions.
 - Dagger Hilt → Android-specific library from Dagger to solve Dependency Injection more easily.
@@ -48,7 +48,7 @@ In order to do that, I’ve applied the **D**ependency inversion principle of SO
 
 It has the business-logic, knowns WHERE to ask for the data, is the entry point of the **DATA** layer and acts as single source of truth for the **DOMAIN** layer. May contain 1-N data sources.
 
-I.e in the App, `CoinRepository` is subscribed to the `CoinLocalDataSource` [Flow](https://developer.android.com/kotlin/flow) of the current selected fiat currency, and every time is changed new item is emitted and Repository reacts requesting the data from `CoinRemoteDataSource`. 
+I.e in the App, `CoinRepository` is subscribed to the current selected fiat currency [Flow](https://developer.android.com/kotlin/flow) from the local DataSource `CoinLocalDataSource`. Every time fiat currency changes a new item is emitted and Repository reacts requesting the data from remote DataSource `CoinRemoteDataSource`. 
 
 Repository is responsable to fetch data from remote and save it locally if required, or retrieve data only from an specific datasource in some situations, whatever it is business-logic.
 
@@ -61,7 +61,7 @@ Repository is responsable to fetch data from remote and save it locally if requi
 Simple layer but not less important, It contains all the Dataset shared among all the App. In here exists the UseCase’s. 
 
 I understand the UseCase as a bridge between **PRESENTATION ↔  DATA,** it’s an access point which **PRESENTATION layer** uses to communicate with the business-logic.
-Pure Kotlin classes should be what we found here, isolate framework is the key to leave this layer platform-agnostic remaining ummutable when we change framework teconologies during the development (e.g. changing Volley for Retrofit, starting with SharedPreferences and then migrate to a SQL DB like Room...).
+Pure Kotlin classes should be what we found here, isolate framework is the key to leave this layer platform-agnostic remaining immutable when we change framework teconologies during the development (e.g. changing Volley for Retrofit or start with SharedPreferences and then migrate to a SQL DB like Room...).
 
 Here is where I change the current execution to an IO thread through [Coroutines Dispatchers](https://kotlinlang.org/docs/coroutine-context-and-dispatchers.html) by default. All the UseCase’s will go to background when executed before consulting **DATA** layer via repository. This will prevent any accidental long task execution in the MainThread afecting App performance and the UX. 
 
@@ -88,8 +88,8 @@ Extending from [ViewModel](https://developer.android.com/topic/libraries/archite
 
 The responsibilities of this class is to connect with the business-logic through UseCase’s and updates the UiState using the `Reducer`.
 
-> ViewModel has an unique object → `UiState`. This object is a [MutableState](https://developer.android.com/reference/kotlin/androidx/compose/runtime/MutableState) class from compose and will be used to represent what to render in the UI. Compose UI *recomposes* every time this object changes. 
-At the same time Compose UI will be notifying the ViewModel through event callbacks corresponding to user actions or view changes, ViewModel will react to this updating back the `UiState` and provoking a *recomposition*. So here we have a closed UDF 🔁.
+> ViewModel has an unique <em>public</em> property → `UiState`. Is a [MutableState](https://developer.android.com/reference/kotlin/androidx/compose/runtime/MutableState) class from compose and will be used to represent what to render in the UI. Compose UI *recomposes* every time the object updates. 
+At the same time Compose UI will be notifying the ViewModel through event callbacks corresponding to user actions or view changes, ViewModel will react to this updating back the `UiState` and provoking a *recomposition*. So here we have the UDF 🔁.
 > 
 
 ### Reducer.
@@ -100,21 +100,21 @@ In a pure Redux state machine there are 3 principles.
 
 - Store → Single source of truth, where the **State** is stored. If you realise we already have this piece in our architecture, the **ViewModel**.
 - Action → Is the only way to change the **State,** an object describing what happened.
-- Reducer → The implementation on how the state is transformed by **Actions**
+- Reducer → The implementation of how the state is transformed by **Actions**
 
 As you can see, I’m using **Action** and **Reducer** concepts which will be a key piece of our **UDF** pattern, there is no need to create an extra **Store** object, **ViewModel** will take care of that by default without carrying it with more responsibilities.
 
-Reducer class will be open to recieve new **Actions** and scales quite well always in the same way without break any current implementation, full-filling **O**pen-Closed principle of SOLID.
+Reducer class will be open to recieve new **Actions** and scales quite well always in the same way without break the current implementation, full-filling **O**pen-Closed principle of SOLID.
 
 ### Compose UI.
 
 What to say! A new huge paradigm, a really nice declarative way to define the UI in pure kotlin and really good in a matter of reusability.
 
-Still in discovering mode, I think most of us find ourselves here. Personally I only developed a full production app in Compose and another one really small, so I still have a long way to go 🚀.
+I'm still in discovering mode, I think most of us find ourselves here. Personally I only developed a full production app in Compose and another one really small, so I still have a long way to go 🚀.
 
-Back to the technically speaking, this part simply renders what the `UiState` of ViewModel has, and notifies the ViewModel through callbacks user interaction and view changes. Doing like this the UI has no more responsibilities, the fewer things the better.
+Back to the technically speaking, this part simply renders what the `UiState` of ViewModel has, and notifies the ViewModel the user interaction through callbacks and view changes. Doing like this the UI has no more responsibilities, the fewer things the better.
 
-> Since `UiState` are pure [data classes](https://kotlinlang.org/docs/data-classes.html), an may have more inside, I considere OK to call in the following way (e.g.) → `uiState.coinSummary.allTimeHighPrice`  without worrying about the [Law Of Demeter](https://en.wikipedia.org/wiki/Law_of_Demeter), I insist, only in case of pure data classes without any logic associated.
+> Since `UiState` are pure [data classes](https://kotlinlang.org/docs/data-classes.html), an may have more inside, I considere OK to call in the following way (e.g.) → `uiState.coinSummary.allTimeHighPrice` without worrying about the [Law Of Demeter](https://en.wikipedia.org/wiki/Law_of_Demeter), I insist, only in case of pure data classes without any logic associated.
 > 
 
 ![image](https://user-images.githubusercontent.com/12541369/155104232-b7371775-cbcb-4f98-882e-6b4c77b9747e.png)
@@ -142,6 +142,6 @@ I would take option 2.
 
 # Navigation.
 
-Using Compose changes the way we use the Android Framework classes. Looks very natural to use a single-activity scheme and thanks to [Jetpack Navigation with compose](https://developer.android.com/jetpack/compose/navigation) we can just navigate between composables instead of the traditional approach of a new Activity/Fragment per screen. As far as I could see, it’s easy to implement and scales pretty well.
+Compose changes the way we use the Android Framework classes. I found very natural to use a single-activity scheme (at least with this small App) and thanks to [Jetpack Navigation with compose](https://developer.android.com/jetpack/compose/navigation) we can just navigate between composables instead of the traditional approach of a new Activity/Fragment per screen. As far as I could see, it’s easy to implement and scales pretty well.
 
 I’ve created a `NavRoute` class which helps to isolate the Navigation definition logic making easy to reuse and scale as new screens are required.
