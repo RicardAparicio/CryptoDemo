@@ -10,7 +10,7 @@ I've tried to touch the most trending frameworks, design paradigms like function
 - Kotlin Coroutines and Flow → Language-native asynchronous tasks, concurrency and reactive programming.
 - Arrow (concretely the Either class) → Wrapping the results of the UseCase’s and Data layer.
 - Redux (custom approach) → Transforming DOMAIN dataset into something more concrete for the UI through different Actions.
-- Dagger Hilt → Dependency injection.
+- Dagger Hilt → Android-specific library from Dagger to solve Dependency Injection more easily.
 - Compose UI → Most recent and modern toolkit for render Android Views, a game changer! 🤯
 
 ![](demogif.gif)
@@ -27,7 +27,9 @@ Always [YAGNI](https://es.wikipedia.org/wiki/YAGNI) principle in mind, one of my
 - features → All the app capabilities separated in specific packages.
 - theme → Compose themming stuff.
 
-Every feature may have 3 main packages corresponding to Clean Architecture layers concept, I’ve logically divided in: **DATA, DOMAIN** and **PRESENTATION.**
+Every feature may have 3 main packages corresponding to Clean Architecture layers concept, I’ve logically divided into: **DATA, DOMAIN** and **PRESENTATION.**
+
+<img width="600" alt="Screenshot 2022-02-27 at 18 31 35" src="https://user-images.githubusercontent.com/12541369/155892990-8206b4c0-2cfe-4281-8c94-5cc9d9016c2f.png">
 
 ## DATA Layer.
 
@@ -56,9 +58,10 @@ Repository is responsable to fetch data from remote and save it locally if requi
 
 ## DOMAIN Layer.
 
-Quite simple layer but not less important, It contains all the Dataset shared among all the App. In here exists the UseCase’s.
+Simple layer but not less important, It contains all the Dataset shared among all the App. In here exists the UseCase’s. 
 
 I understand the UseCase as a bridge between **PRESENTATION ↔  DATA,** it’s an access point which **PRESENTATION layer** uses to communicate with the business-logic.
+Pure Kotlin classes should be what we found here, isolate framework is the key to leave this layer platform-agnostic remaining ummutable when we change framework teconologies during the development (e.g. changing Volley for Retrofit, starting with SharedPreferences and then migrate to a SQL DB like Room...).
 
 Here is where I change the current execution to an IO thread through [Coroutines Dispatchers](https://kotlinlang.org/docs/coroutine-context-and-dispatchers.html) by default. All the UseCase’s will go to background when executed before consulting **DATA** layer via repository. This will prevent any accidental long task execution in the MainThread afecting App performance and the UX. 
 
