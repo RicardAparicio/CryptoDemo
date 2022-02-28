@@ -96,10 +96,10 @@ At the same time Compose UI will be notifying the ViewModel through event callba
 
 I’ve taken the idea of Redux to transform Domain models into Ui-specific models.
 
-In a pure Redux state machine there are 3 principles.
+In a pure Redux state machine there are 3 main pieces.
 
 - Store → Single source of truth, where the **State** is stored. If you realise we already have this piece in our architecture, the **ViewModel**.
-- Action → Is the only way to change the **State,** an object describing what happened.
+- Action → Is the only way to change the **State.** An object describing what to do.
 - Reducer → The implementation of how the state is transformed by **Actions**
 
 As you can see, I’m using **Action** and **Reducer** concepts which will be a key piece of our **UDF** pattern, there is no need to create an extra **Store** object, **ViewModel** will take care of that by default without carrying it with more responsibilities.
