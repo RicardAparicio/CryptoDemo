@@ -121,7 +121,7 @@ Back to the technically speaking, this part simply renders what the `UiState` of
 
 <em>Happy path example of Coin Detail screen. (Loading and error renderings are omited.)</em>
 
-# Modulation or Monolithic?
+# Modulation or Monolith?
 
 It’s just a balance in between how big is/will be the app, how many people will work on and the development time we have.
 
