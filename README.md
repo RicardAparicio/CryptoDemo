@@ -125,9 +125,9 @@ Back to the technically speaking, this part simply renders what the `UiState` of
 
 It’s just a balance in between how big is/will be the app, how many people will work on and the development time we have.
 
-Modulation creates an extra level of abstraction and boundaries between the architecture pieces, witch allows work in parallel without disturb each other, but also generates an overload on development times. For me would worth it for medium-large apps with maintenance in the future and multiple devs in the team, otherwise I’d prefer monoliths.
+Modulation creates an extra level of abstraction and boundaries between the different App pieces, witch favors work in parallel without stepping on between teammates, but also generates an overload on development times. For me would worth it for medium-large apps with maintenance in the future and multiple devs in the team, otherwise provabily I’d prefer monoliths.
 
-This App is Monolithic for the reasons above and because I think its fast to analyse for the other people 😃  but... In case of applying modulation, I’d considere two different scenarios:
+For this App I've choosed a monolith, I think its faster to analyse for the other people 😃  but... In case of need to modulate, I’d considere two different scenarios:
 
 1. Modularised by arch. layer (DATA, DOMAIN and PRESENTATION).
 2. Modularised by features.
