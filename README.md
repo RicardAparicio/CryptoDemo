@@ -61,7 +61,7 @@ Repository is responsable to fetch data from remote and save it locally if requi
 Simple layer but not less important, It contains all the Dataset shared among all the App. In here exists the UseCase’s. 
 
 I understand the UseCase as a bridge between **PRESENTATION ↔  DATA,** it’s an access point which **PRESENTATION layer** uses to communicate with the business-logic.
-Pure Kotlin classes should be what we found here, isolate framework is the key to leave this layer platform-agnostic remaining immutable when we change framework teconologies during the development (e.g. changing Volley for Retrofit or start with SharedPreferences and then migrate to a SQL DB like Room...).
+Pure Kotlin classes should be what we found here, being isolated from framework this layer remainds immutable when we change teconologies during the development (e.g. Start with SharedPreferences and then migrate to a SQL DB like Room or migrating from classic Views to Compose UI).
 
 Here is where I change the current execution to an IO thread through [Coroutines Dispatchers](https://kotlinlang.org/docs/coroutine-context-and-dispatchers.html) by default. All the UseCase’s will go to background when executed before consulting **DATA** layer via repository. This will prevent any accidental long task execution in the MainThread afecting App performance and the UX. 
 
