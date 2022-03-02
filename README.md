@@ -11,7 +11,7 @@ I've tried to touch the most trending frameworks, design paradigms like function
 - Arrow (concretely the Either class) → Wrapping the results of the UseCase’s and Data layer.
 - Redux (custom approach) → Transforming DOMAIN dataset into something more concrete for the UI through different Actions.
 - Dagger Hilt → Android-specific library from Dagger to solve Dependency Injection more easily.
-- Compose UI → Most recent and modern toolkit for render Android Views, a game changer! 🤯
+- Compose UI → Most recent and modern toolkit for render UI in Android, a game changer! 🤯
 
 ![](demogif.gif)
 
