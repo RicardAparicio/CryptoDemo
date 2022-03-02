@@ -10,8 +10,8 @@ import retrofit2.http.Query
 interface CoinApiService {
     @GET("coins/markets")
     fun getCoins(
+        @Query("vs_currency") currency: String,
         @Query("per_page") itemsPerPage: Int = 20,
-        @Query("vs_currency") currency: String = "eur",
         @Query("sparkline") sparkLine: Boolean = false,
     ): Call<List<CoinSummaryApiModel>>
 

@@ -33,8 +33,8 @@ class CoinRetrofitDataSource
         request(
             call = coinService.getCoins(
                 currency = when (currency) {
-                    FiatCurrency.Eur -> "eur"
-                    FiatCurrency.Usd -> "usd"
+                    FiatCurrency.Eur -> EUR_SYMBOL
+                    FiatCurrency.Usd -> USD_SYMBOL
                 }
             ),
             mapping = { coinsSummaryApiModel ->
@@ -59,4 +59,9 @@ class CoinRetrofitDataSource
         }.getOrElse {
             NetworkingError.left()
         }
+
+    companion object {
+        private const val EUR_SYMBOL = "eur"
+        private const val USD_SYMBOL = "usd"
+    }
 }
