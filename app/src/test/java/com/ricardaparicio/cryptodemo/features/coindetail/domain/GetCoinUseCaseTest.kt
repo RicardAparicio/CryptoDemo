@@ -4,6 +4,7 @@ import arrow.core.Either
 import arrow.core.left
 import arrow.core.right
 import com.ricardaparicio.cryptodemo.core.NetworkingError
+import com.ricardaparicio.cryptodemo.features.TestCoroutineDispatchers
 import com.ricardaparicio.cryptodemo.features.common.data.repository.CoinRepository
 import com.ricardaparicio.cryptodemo.features.common.domain.model.Coin
 import com.ricardaparicio.cryptodemo.features.common.domain.model.CoinSummary
@@ -12,10 +13,12 @@ import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.impl.annotations.MockK
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
 
+@ExperimentalCoroutinesApi
 class GetCoinUseCaseTest {
     @MockK
     private lateinit var coinRepository: CoinRepository
@@ -24,21 +27,22 @@ class GetCoinUseCaseTest {
     @Before
     fun onBefore() {
         MockKAnnotations.init(this)
-        getCoinUseCase = GetCoinUseCase(coinRepository)
+        getCoinUseCase = GetCoinUseCase(coinRepository, TestCoroutineDispatchers)
     }
 
     @Test
-    fun `when UseCase is executed then request coin detail from repository with the same params`() = runBlocking {
-        coEvery { coinRepository.getCoin(COIN_ID) } returns coin.right()
+    fun `when UseCase is executed then request coin detail from repository with the same params`() =
+        runTest {
+            coEvery { coinRepository.getCoin(COIN_ID) } returns coin.right()
 
-        getCoinUseCase(GetCoinUseCase.Params(COIN_ID))
+            getCoinUseCase(GetCoinUseCase.Params(COIN_ID))
 
-        coVerify(exactly = 1) { coinRepository.getCoin(COIN_ID) }
-    }
+            coVerify(exactly = 1) { coinRepository.getCoin(COIN_ID) }
+        }
 
     @Test
     fun `when Repository result is successful then return Either right as UseCase Result`() =
-        runBlocking {
+        runTest {
             val expectedResult = GetCoinUseCase.Result(coin)
             coEvery { coinRepository.getCoin(any()) } returns coin.right()
 
@@ -49,15 +53,16 @@ class GetCoinUseCaseTest {
         }
 
     @Test
-    fun `when Repository result is failed then return Either left as Failure`() = runBlocking {
-        val expectedResult = NetworkingError
-        coEvery { coinRepository.getCoin(any()) } returns expectedResult.left()
+    fun `when Repository result is failed then return Either left as Failure`() =
+        runTest {
+            val expectedResult = NetworkingError
+            coEvery { coinRepository.getCoin(any()) } returns expectedResult.left()
 
-        val result = getCoinUseCase(GetCoinUseCase.Params(COIN_ID))
+            val result = getCoinUseCase(GetCoinUseCase.Params(COIN_ID))
 
-        assert(result.isLeft())
-        assert((result as Either.Left).value == expectedResult)
-    }
+            assert(result.isLeft())
+            assert((result as Either.Left).value == expectedResult)
+        }
 
     companion object {
         private const val COIN_ID = "btc"
