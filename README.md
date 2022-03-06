@@ -9,8 +9,8 @@ I kept it simple with the idea to focus on the architecture concepts instead of 
 I've tried to touch the most trending frameworks, design paradigms like functional or reactive programming and last approaches which I've been working on in the last months and years. To name a few of them:
 
 - Kotlin Coroutines → Language-native for asynchronous tasks, concurrency and reactive programming (Flow).
-- Arrow (concretely the Either class) → Wrapping the results of the UseCase’s and Data layer.
-- Redux (custom approach) → Transforming DOMAIN dataset into something more concrete for the UI through different Actions.
+- Arrow (concretely the Either class) → Return a result with either success or error in a functional way.
+- Redux (custom approach) → Transfor/map datasets from one type to another through different Actions.
 - Dagger Hilt → Android-specific library from Dagger to solve Dependency Injection more easily.
 - Compose UI → Most recent and modern toolkit for render UI in Android, a game changer! 🤯
 
@@ -21,6 +21,7 @@ I've tried to touch the most trending frameworks, design paradigms like function
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;· [DATA Layer](#data-layer)\
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;· [DOMAIN Layer](#domain-layer)\
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;· [PRESENTATION Layer](#presentation-layer)\
+· [Dependency Injection](#dependency-injection)\
 · [Modulation vs Monolith](#modulation-or-monolith)\
 · [Navigation](#navigation)\
 · [Testing](#testing)
@@ -130,6 +131,14 @@ Back to the technical part, Compose simply renders what the `UiState` of ViewMod
 
 <em>Happy path example of Coin Detail screen. (Loading and error renderings are omited.)</em>
 
+# Dependency Injection.
+
+[Dagger Hilt](https://developer.android.com/training/dependency-injection/hilt-android), the Android-specific implementation of [Dagger](https://dagger.dev/), finally we can scape from the Dagger complexity thanks to something simplier, more clear and just as useful! 
+
+Having containers (Modules) which provides the dependencies for every class reduces a lot of boilerplate than if you did it by hand, at the same time classes won't have to worry about providing their own dependencies and best of all, provide those dependencies mocked when testing will be trivial.
+
+Use a [DI](https://en.wikipedia.org/wiki/Dependency_injection) library is almost a must!
+
 # Modulation or Monolith?
 
 It’s just a balance in between how big is/will be the app, how many people will work on it and the development time we have.
@@ -150,9 +159,9 @@ I would take option 2.
 
 # Navigation.
 
-Compose changes the way we use the Android Framework classes. I found very natural to use a single-activity scheme (at least with this small App) and thanks to [Jetpack Navigation with compose](https://developer.android.com/jetpack/compose/navigation) we can just navigate between composables instead of the traditional approach of a new Activity/Fragment per screen. As far as I could see, it’s easy to implement and scales pretty well.
+Compose can change the way of how we implement the Android Framework classes. I found very natural to use a single-activity scheme (at least with this small App) and thanks to [Jetpack Navigation with compose](https://developer.android.com/jetpack/compose/navigation) we can just navigate between composables instead of the traditional approach of a new Activity/Fragment per screen. As far as I could see, it’s easy to implement and scales pretty well.
 
 I’ve created a `NavRoute` class which helps to isolate the Navigation definition logic making easy to reuse and scale every time new screens are required.
 
 # Testing.
-(Work In Progress...)
+*Work In Progress... For now I have unitari test of `UseCases` and `CoinRespository`. You can checkout to **`feature-testing`** to review them*
