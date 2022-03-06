@@ -6,6 +6,7 @@ import arrow.core.right
 import com.ricardaparicio.cryptodemo.core.NetworkingError
 import com.ricardaparicio.cryptodemo.core.usecase.NoParam
 import com.ricardaparicio.cryptodemo.features.TestCoroutineDispatchers
+import com.ricardaparicio.cryptodemo.features.coinsState
 import com.ricardaparicio.cryptodemo.features.common.data.repository.CoinRepository
 import com.ricardaparicio.cryptodemo.features.common.domain.model.CoinListState
 import io.mockk.MockKAnnotations
@@ -65,8 +66,4 @@ class GetCoinListUseCaseTest {
             assert(result.first().isLeft())
             assert((result.first() as Either.Left).value == expectedResult)
         }
-
-    companion object {
-        private val coinsState get() = CoinListState.Coins(emptyList())
-    }
 }

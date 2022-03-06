@@ -6,7 +6,7 @@ import arrow.core.right
 import com.ricardaparicio.cryptodemo.core.NetworkingError
 import com.ricardaparicio.cryptodemo.features.TestCoroutineDispatchers
 import com.ricardaparicio.cryptodemo.features.common.data.repository.CoinRepository
-import com.ricardaparicio.cryptodemo.features.common.domain.model.FiatCurrency
+import com.ricardaparicio.cryptodemo.features.fiatCurrency
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -63,8 +63,4 @@ class UpdateFiatCurrencyUseCaseTest {
             assert(result.isLeft())
             assert((result as Either.Left).value == expectedResult)
         }
-
-    companion object {
-        private val fiatCurrency get() = FiatCurrency.Eur
-    }
 }

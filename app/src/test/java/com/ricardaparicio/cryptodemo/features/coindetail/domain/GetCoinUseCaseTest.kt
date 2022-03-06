@@ -4,7 +4,9 @@ import arrow.core.Either
 import arrow.core.left
 import arrow.core.right
 import com.ricardaparicio.cryptodemo.core.NetworkingError
+import com.ricardaparicio.cryptodemo.features.COIN_ID
 import com.ricardaparicio.cryptodemo.features.TestCoroutineDispatchers
+import com.ricardaparicio.cryptodemo.features.coin
 import com.ricardaparicio.cryptodemo.features.common.data.repository.CoinRepository
 import com.ricardaparicio.cryptodemo.features.common.domain.model.Coin
 import com.ricardaparicio.cryptodemo.features.common.domain.model.CoinSummary
@@ -63,24 +65,4 @@ class GetCoinUseCaseTest {
             assert(result.isLeft())
             assert((result as Either.Left).value == expectedResult)
         }
-
-    companion object {
-        private const val COIN_ID = "btc"
-        private val coin = Coin(
-            coinSummary = CoinSummary(
-                id = "btc",
-                symbol = "BTC",
-                name = "bitcoin",
-                image = "",
-                price = 34.000f,
-                marketCapRank = 1,
-                fiatCurrency = FiatCurrency.Eur
-            ),
-            description = "Satoshi Nakamoto",
-            ath = 65000f,
-            marketCap = 800000000f,
-            priceChange24h = 2000f,
-            priceChangePercentage24h = 3f,
-        )
-    }
 }
