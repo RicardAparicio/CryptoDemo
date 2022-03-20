@@ -8,16 +8,17 @@ import com.ricardaparicio.cryptodemo.features.common.domain.model.FiatCurrency
 const val COIN_ID = "btc"
 val fiatCurrency = FiatCurrency.Eur
 val coinsState = CoinListState.Coins(emptyList())
+val coinSummary = CoinSummary(
+    id = "btc",
+    symbol = "BTC",
+    name = "bitcoin",
+    image = "",
+    price = 34.000f,
+    marketCapRank = 1,
+    fiatCurrency = FiatCurrency.Eur
+)
 val coin = Coin(
-    coinSummary = CoinSummary(
-        id = "btc",
-        symbol = "BTC",
-        name = "bitcoin",
-        image = "",
-        price = 34.000f,
-        marketCapRank = 1,
-        fiatCurrency = FiatCurrency.Eur
-    ),
+    coinSummary = coinSummary,
     description = "Satoshi Nakamoto",
     ath = 65000f,
     marketCap = 800000000f,
