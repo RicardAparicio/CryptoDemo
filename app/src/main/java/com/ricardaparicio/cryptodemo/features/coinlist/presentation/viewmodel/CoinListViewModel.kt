@@ -9,15 +9,15 @@ import arrow.core.Either
 import com.ricardaparicio.cryptodemo.core.Failure
 import com.ricardaparicio.cryptodemo.core.Reducer
 import com.ricardaparicio.cryptodemo.core.usecase.NoParam
-import com.ricardaparicio.cryptodemo.features.common.domain.model.CoinListState
-import com.ricardaparicio.cryptodemo.features.common.domain.model.FiatCurrency
-import com.ricardaparicio.cryptodemo.features.common.ui.viewmodel.ContentLoadingUiAction
 import com.ricardaparicio.cryptodemo.features.coinlist.domain.GetCoinListUseCase
 import com.ricardaparicio.cryptodemo.features.coinlist.domain.GetFiatCurrencyUseCase
 import com.ricardaparicio.cryptodemo.features.coinlist.domain.UpdateFiatCurrencyUseCase
-import com.ricardaparicio.cryptodemo.features.coinlist.presentation.ui.CoinListUiState
 import com.ricardaparicio.cryptodemo.features.coinlist.presentation.reducer.CoinListUiAction
 import com.ricardaparicio.cryptodemo.features.coinlist.presentation.reducer.CoinListUiAction.*
+import com.ricardaparicio.cryptodemo.features.coinlist.presentation.ui.CoinListUiState
+import com.ricardaparicio.cryptodemo.features.common.domain.model.CoinListState
+import com.ricardaparicio.cryptodemo.features.common.domain.model.FiatCurrency
+import com.ricardaparicio.cryptodemo.features.common.ui.viewmodel.ContentLoadingUiAction
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -38,12 +38,12 @@ class CoinListViewModel
 
     init {
         viewModelScope.launch {
-            fetchFiatCurrency()
+            getFiatCurrency()
             fetchCoins()
         }
     }
 
-    private suspend fun fetchFiatCurrency() {
+    private suspend fun getFiatCurrency() =
         getFiatCurrencyUseCase(NoParam)
             .fold(
                 { failure ->
@@ -53,9 +53,8 @@ class CoinListViewModel
                     reduce(UpdateFiatCurrency(result.currency))
                 }
             )
-    }
 
-    private fun updateFiatCurrency(currency: FiatCurrency) {
+    private fun updateFiatCurrency(currency: FiatCurrency) =
         viewModelScope.launch {
             updateFiatCurrencyUseCase(UpdateFiatCurrencyUseCase.Params(currency))
                 .fold(
@@ -64,11 +63,9 @@ class CoinListViewModel
                     },
                     { result ->
                         reduce(UpdateFiatCurrency(result.currency))
-
                     }
                 )
         }
-    }
 
     private fun fetchCoins() =
         getCoinListUseCase(NoParam)

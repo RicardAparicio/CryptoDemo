@@ -1,7 +1,7 @@
+@file:JvmName(name = "NumberFormatExt")
 package com.ricardaparicio.cryptodemo.core.util
 
 import com.ricardaparicio.cryptodemo.features.common.domain.model.FiatCurrency
-import java.text.DecimalFormat
 import java.text.NumberFormat
 import java.util.*
 
