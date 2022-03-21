@@ -1,3 +1,4 @@
+@file:JvmName(name = "NumberFormatExt")
 package com.ricardaparicio.cryptodemo.core.util
 
 import com.ricardaparicio.cryptodemo.features.common.domain.model.FiatCurrency
