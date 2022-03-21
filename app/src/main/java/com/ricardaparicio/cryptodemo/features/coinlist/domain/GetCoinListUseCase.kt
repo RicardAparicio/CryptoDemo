@@ -17,6 +17,7 @@ class GetCoinListUseCase @Inject constructor(
     private val coinRepository: CoinRepository,
     dispatchers: CoroutineDispatchers,
 ) : FlowUseCase<NoParam, Result>(dispatchers) {
+
     data class Result(val coinState: CoinListState) : UseCaseResult
 
     override fun doWork(params: NoParam): Flow<Either<Failure, Result>> =

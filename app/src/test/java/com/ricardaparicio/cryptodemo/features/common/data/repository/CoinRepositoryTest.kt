@@ -71,8 +71,10 @@ class CoinRepositoryTest {
 
             val result = coinRepository.updateFiatCurrency(fiatCurrency)
 
-            coVerify(exactly = 1) { localDataSource.updateFiatCurrency(fiatCurrency) }
-            coVerify(exactly = 1) { localDataSource.fiatCurrencyFlow() }
+            coVerify(exactly = 1) {
+                localDataSource.updateFiatCurrency(fiatCurrency)
+                localDataSource.fiatCurrencyFlow()
+            }
             assert(result.isRight())
             assert((result as Either.Right).value == fiatCurrency)
         }
@@ -97,8 +99,10 @@ class CoinRepositoryTest {
 
             val result = coinRepository.updateFiatCurrency(fiatCurrency)
 
-            coVerify(exactly = 1) { localDataSource.updateFiatCurrency(fiatCurrency) }
-            coVerify(exactly = 1) { localDataSource.fiatCurrencyFlow() }
+            coVerify(exactly = 1) {
+                localDataSource.updateFiatCurrency(fiatCurrency)
+                localDataSource.fiatCurrencyFlow()
+            }
             assert(result.isLeft())
             assert((result as Either.Left).value == LocalError)
         }
@@ -111,8 +115,10 @@ class CoinRepositoryTest {
 
             val result = coinRepository.getCoin(COIN_ID)
 
-            coVerify(exactly = 1) { localDataSource.fiatCurrencyFlow() }
-            coVerify(exactly = 1) { remoteDataSource.getCoin(COIN_ID, fiatCurrency) }
+            coVerify(exactly = 1) {
+                localDataSource.fiatCurrencyFlow()
+                remoteDataSource.getCoin(COIN_ID, fiatCurrency)
+            }
             assert(result.isRight())
             assert((result as Either.Right).value == coin)
         }
@@ -138,8 +144,10 @@ class CoinRepositoryTest {
 
             val result = coinRepository.getCoin(COIN_ID)
 
-            coVerify(exactly = 1) { localDataSource.fiatCurrencyFlow() }
-            coVerify(exactly = 1) { remoteDataSource.getCoin(COIN_ID, fiatCurrency) }
+            coVerify(exactly = 1) {
+                localDataSource.fiatCurrencyFlow()
+                remoteDataSource.getCoin(COIN_ID, fiatCurrency)
+            }
             assert(result.isLeft())
             assert((result as Either.Left).value == NetworkingError)
         }
@@ -156,8 +164,10 @@ class CoinRepositoryTest {
                 states.add(result)
             }
 
-            coVerify(exactly = 1) { localDataSource.fiatCurrencyFlow() }
-            coVerify(exactly = 1) { remoteDataSource.getCoinList(fiatCurrency) }
+            coVerify(exactly = 1) {
+                localDataSource.fiatCurrencyFlow()
+                remoteDataSource.getCoinList(fiatCurrency)
+            }
             assert(states.size == 2)
             assert(states[0].isRight())
             assert((states[0] as Either.Right).value is CoinListState.Loading)
@@ -195,8 +205,10 @@ class CoinRepositoryTest {
                 states.add(result)
             }
 
-            coVerify(exactly = 1) { localDataSource.fiatCurrencyFlow() }
-            coVerify(exactly = 1) { remoteDataSource.getCoinList(fiatCurrency) }
+            coVerify(exactly = 1) {
+                localDataSource.fiatCurrencyFlow()
+                remoteDataSource.getCoinList(fiatCurrency)
+            }
             assert(states.size == 2)
             assert(states[0].isRight())
             assert((states[0] as Either.Right).value is CoinListState.Loading)
