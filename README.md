@@ -165,7 +165,7 @@ Compose can change the way of how we implement the Android Framework classes. I 
 I’ve created a `NavRoute` class which helps to isolate the Navigation definition logic making easy to reuse and scale every time new screens are required.
 
 # Testing.
-I've choosed [MockK](https://mockk.io/) for mocking in Unit Tests, designed to be used in Kotlin which I think is quite simple and useful, its sintax are cool 😄. The well known [Mockito Kotlin](https://github.com/mockito/mockito-kotlin) would be an alternative, but choose one or the another I think it's a matter of taste.
+I've choosed [MockK](https://mockk.io/) for mocking, building scenarios and verifing in Unit Tests, designed to be used in Kotlin which I think is quite simple and useful, its sintax are cool 😄. The well known [Mockito Kotlin](https://github.com/mockito/mockito-kotlin) would be an alternative, but choose one or the another I think it's a matter of taste.
 
 `ViewModels`, `Reducers`, `UseCases`, and the `Repository` have been fully unitary tested.
 The classic Given-When-Then (GWT) semi-structure is what you are going to find. Both happy and unhappy paths are tested.
