@@ -13,6 +13,7 @@ I've tried to touch the most trending frameworks, design paradigms like function
 - Redux (custom approach) → Transfor/map datasets from one type to another through different Actions.
 - Dagger Hilt → Android-specific library from Dagger to solve Dependency Injection more easily.
 - Compose UI → Most recent and modern toolkit for render UI in Android, a game changer! 🤯
+- MockK -> To replace real classes with mocks when testing, also has tools to help in the given-when-then formula.
 
 ![](demogif.gif)
 
@@ -80,7 +81,7 @@ UseCase's can also help to abstract common logic between features if necessary, 
 💡 PUBLIC METHODS OF DOMAIN AND DATA LAYERS ARE...
 
 - `suspend`. I consider [Kotlin Corroutines](https://developer.android.com/kotlin/coroutines) sufficiently integrated into our day to day to use them anywhere in the App.
-- Returning `Either` classes (from [Arrow](https://github.com/arrow-kt/arrow)). `Either` class has 2 values, in this case a `Failure` object representing an specific error and the expected result. 
+- Returning `Either` classes (from [Arrow](https://github.com/arrow-kt/arrow)). `Either` class has 2 values, in this case a `Failure` object representing an specific error and the expected result. Helps a lot to test happy and unhappy paths! 
 The idea behind that it is wrapping possible `Throwables` into something more explicit and platform-agnostic in a functional way, so we can treat each error differently later in the **UI.** 
 A more functional and exception-free solution to return stuff 🙃.
 
