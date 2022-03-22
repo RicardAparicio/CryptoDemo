@@ -4,4 +4,3 @@ interface UseCaseParams
 interface UseCaseResult
 
 object NoParam : UseCaseParams
-object NoResult : UseCaseResult
