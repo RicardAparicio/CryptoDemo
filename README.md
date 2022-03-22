@@ -164,4 +164,11 @@ Compose can change the way of how we implement the Android Framework classes. I 
 I’ve created a `NavRoute` class which helps to isolate the Navigation definition logic making easy to reuse and scale every time new screens are required.
 
 # Testing.
-*Work In Progress... For now I have unitari test of `UseCases` and `CoinRespository`. You can checkout to **`feature-testing`** to review them*
+I've choosed [MockK](https://mockk.io/) for mocking in Unit Tests, designed to be used in Kotlin which I think is quite simple and useful, its sintax are cool 😄. The well known [Mockito Kotlin](https://github.com/mockito/mockito-kotlin) would be an alternative, but choose one or the another I think it's a matter of taste.
+
+`ViewModels`, `Reducers`, `UseCases`, and the `Repository` have been fully unitary tested.
+The classic Given-When-Then (GWT) semi-structure is what you are going to find. Both happy and unhappy paths are tested.
+
+As you will see, `TestCoroutineDispatchers` class is replacing `CoroutineDispatchers` class that `UseCases` have. Doing so I can run all the suspending functions in the <em>UnconfinedTestDispatcher</em> thread necessary when testing with coroutines.
+
+> I've pending to do an Integration/End-to-end tests for the `UseCases` mocking the retrofit endpoint calls with the help of [MockWebServer](https://github.com/square/okhttp/tree/master/mockwebserver). Also I would like to start to see how to UI testing with Jetpack Compose! But for now I left it out of the scope for the current version of this demo.
