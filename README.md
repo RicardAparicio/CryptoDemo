@@ -82,7 +82,7 @@ UseCase's can also help to abstract common logic between features if necessary, 
 
 - `suspend`. I consider [Kotlin Corroutines](https://developer.android.com/kotlin/coroutines) sufficiently integrated into our day to day to use them anywhere in the App.
 - Returning `Either` classes (from [Arrow](https://github.com/arrow-kt/arrow)). `Either` class has 2 values, in this case a `Failure` object representing an specific error and the expected result. Helps a lot to test happy and unhappy paths! 
-The idea behind that it is wrapping possible `Throwables` into something more explicit and platform-agnostic in a functional way, so we can treat each error differently later in the **UI.** 
+The idea behind that it is wrapping possible `Throwables` into something more explicit in a functional way, so we can treat each error differently later in the **UI.** 
 A more functional and exception-free solution to return stuff 🙃.
 
 ## PRESENTATION Layer.
