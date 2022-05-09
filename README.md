@@ -119,11 +119,11 @@ Reducer class will be open to recieve new **Actions**, also scales quite well al
 
 ### Compose UI.
 
-What to say! A new huge paradigm, a really nice declarative way to define the UI in pure kotlin and really good in a matter of reusability.
+What to say! A new huge paradigm, I'm still in discovering mode and I think most of us find ourselves her, so I still have a long way to go 🚀. 
 
-I'm still in discovering mode and I think most of us find ourselves here. Personally I only developed a full production app in Compose and another really small one, so I still have a long way to go 🚀.
+Allows a really nice declarative way to define the UI in pure kotlin and really good in a matter of reusability.
 
-Back to the technical part, Compose simply renders what the `UiState` of ViewModel has, and it notifies the ViewModel the user interaction through callbacks and view changes. Therefore the UI has no more responsibilities, the fewerer the better.
+Compose simply renders what the `UiState` of ViewModel has, and it notifies the ViewModel the user interaction through callbacks and view changes. Therefore the UI has no more responsibilities, the fewerer the better.
 
 > Since `UiState's` are pure [Data classes](https://kotlinlang.org/docs/data-classes.html), and may have more of them inside, I consider OK to use it in the following way (e.g.) → `uiState.coinSummary.allTimeHighPrice` without worrying about the [Law Of Demeter](https://en.wikipedia.org/wiki/Law_of_Demeter), I hightlight, only in case of pure Data classes without any logic associated.
 > 
@@ -144,7 +144,7 @@ Use a [DI](https://en.wikipedia.org/wiki/Dependency_injection) library is almost
 
 It’s just a balance in between how big is/will be the app, how many people will work on it and the development time we have.
 
-Modulation creates an extra level of abstraction and boundaries between the different App pieces, which favors work in parallel without stepping on between teammates because modules remain completely isoleted from each other, but also generates an overload on development times. For me would be worth it for medium-large apps with maintenance in the future and multiple devs in the team, otherwise I’d provabily prefer monoliths.
+Modulation has several benefits, like when you change a file not the whole project is recompiled but only the affected parts, also creates an extra level of abstraction and boundaries between the different App pieces, which favors work in parallel because modules remain completely isoleted from each other.
 
 For this App I've choosed a monolith, I think it's faster to review 😃 but... In case of need to modulate, I’d consider two different scenarios:
 
