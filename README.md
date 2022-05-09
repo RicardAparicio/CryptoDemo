@@ -31,7 +31,7 @@ I've tried to touch the most trending frameworks, design paradigms like function
 
 Build under the SOLID principles and Clean Architecture values, inspired on the new official [recommended architecture](https://developer.android.com/jetpack/guide) from Google along with the most interesting concepts I’ve been acquiring throughout my career. 
 
-Always [YAGNI](https://es.wikipedia.org/wiki/YAGNI) principle in mind, one of my favourites!
+Always [YAGNI](https://es.wikipedia.org/wiki/YAGNI) principle in mind, one of the most important for me.
 
 ### Package organisation.
 
@@ -171,5 +171,3 @@ I've choosed [MockK](https://mockk.io/) for mocking, building scenarios and veri
 The classic Given-When-Then (GWT) semi-structure is what you are going to find. Both happy and unhappy paths are tested.
 
 As you will see, `TestCoroutineDispatchers` class is replacing `CoroutineDispatchers` class that `UseCases` have. Doing so I can run all the suspending functions in the <em>UnconfinedTestDispatcher</em> thread necessary when testing with coroutines.
-
-> I've pending to do an Integration/End-to-end tests for the `UseCases` mocking the retrofit endpoint calls with the help of [MockWebServer](https://github.com/square/okhttp/tree/master/mockwebserver). Also I would like to start to see how to UI testing with Jetpack Compose! But for now I left it out of the scope for the current version of this demo.
